@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | LEON Graphics Design & Branding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --gold: #C9A84C; --gold-light: #E8CB7A; --gold-dim: rgba(201,168,76,0.12); --gold-border: rgba(201,168,76,0.22);
+      --obsidian: #080808; --dark: #0E0E0F; --surface: #141416; --surface2: #1A1A1D;
+      --text: #E8E4DC; --text-dim: #888880;
+      --ff-display: 'Bebas Neue', sans-serif; --ff-serif: 'Cormorant Garamond', serif; --ff-body: 'DM Sans', sans-serif;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--obsidian); color:var(--text); font-family:var(--ff-body); overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.5; }
+
+    /* NAVBAR */
+    .navbar { display:flex; justify-content:space-between; align-items:center; padding:0 60px; height:80px; background:rgba(8,8,8,0.9); position:fixed; width:100%; top:0; z-index:1000; -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px); border-bottom:1px solid var(--gold-border); transition:height 0.3s; }
+    .navbar.scrolled { height:64px; }
+    .logo { font-family:var(--ff-display); font-size:2rem; letter-spacing:6px; color:var(--gold); text-decoration:none; }
+    .nav-links { display:flex; gap:40px; }
+    .nav-links a { text-decoration:none; color:var(--text-dim); font-size:0.78rem; letter-spacing:2px; text-transform:uppercase; transition:color 0.3s; position:relative; padding-bottom:4px; }
+    .nav-links a::after { content:''; position:absolute; bottom:0; left:0; width:0; height:1px; background:var(--gold); transition:width 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--gold); }
+    .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+    .menu-toggle { display:none; background:none; border:1px solid var(--gold-border); color:var(--gold); width:40px; height:40px; cursor:pointer; font-size:1.1rem; border-radius:4px; transition:background 0.3s; }
+    .menu-toggle:hover { background:var(--gold-dim); }
+
+    /* PAGE HERO */
+    .page-hero { padding:160px 60px 80px; background:var(--dark); position:relative; overflow:hidden; }
+    .page-hero::before { content:'CONTACT'; position:absolute; font-family:var(--ff-display); font-size:14vw; color:rgba(201,168,76,0.025); top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; letter-spacing:12px; white-space:nowrap; }
+    .page-hero-inner { max-width:1200px; margin:0 auto; position:relative; z-index:1; }
+    .page-eyebrow { font-size:0.72rem; letter-spacing:5px; text-transform:uppercase; color:var(--gold); margin-bottom:20px; }
+    .page-hero h1 { font-family:var(--ff-display); font-size:clamp(3.5rem,8vw,7rem); letter-spacing:3px; line-height:0.95; color:var(--text); }
+    .page-hero h1 em { font-family:var(--ff-serif); font-style:italic; color:var(--gold); font-size:0.7em; }
+    .page-hero-line { width:80px; height:1px; background:var(--gold); margin:32px 0; }
+    .page-hero p { font-family:var(--ff-serif); font-size:1.3rem; font-weight:300; color:var(--text-dim); max-width:600px; line-height:1.7; }
+
+    /* CONTACT LAYOUT */
+    .contact-body { padding:80px 60px; max-width:1200px; margin:0 auto; }
+    .contact-grid { display:grid; grid-template-columns:1fr 1.4fr; gap:4px; background:var(--gold-border); border:1px solid var(--gold-border); margin-bottom:60px; }
+
+    /* Info Panel */
+    .contact-info-panel {
+      background:var(--surface); padding:64px 48px;
+      display:flex; flex-direction:column; justify-content:space-between;
+    }
+    .info-top h2 { font-family:var(--ff-display); font-size:2.2rem; letter-spacing:3px; color:var(--gold); margin-bottom:20px; }
+    .info-top p { color:var(--text-dim); font-size:0.95rem; line-height:1.8; margin-bottom:48px; }
+
+    .contact-detail { display:flex; gap:16px; align-items:flex-start; margin-bottom:32px; }
+    .cd-icon {
+      width:44px; height:44px; border:1px solid var(--gold-border);
+      display:flex; align-items:center; justify-content:center;
+      color:var(--gold); font-size:0.9rem; flex-shrink:0;
+      transition:background 0.3s;
+    }
+    .cd-icon:hover { background:var(--gold-dim); }
+    .cd-label { font-size:0.65rem; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:4px; }
+    .cd-value { color:var(--text); font-size:0.95rem; }
+
+    .info-hours { margin-top:48px; padding-top:32px; border-top:1px solid var(--gold-border); }
+    .info-hours h4 { font-size:0.68rem; letter-spacing:4px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+    .info-hours p { color:var(--text-dim); font-size:0.9rem; line-height:1.8; }
+
+    .info-social { margin-top:40px; display:flex; gap:10px; }
+    .social-link { width:38px; height:38px; border:1px solid var(--gold-border); display:flex; align-items:center; justify-content:center; color:var(--text-dim); text-decoration:none; font-size:0.8rem; transition:all 0.3s; }
+    .social-link:hover { background:var(--gold); color:var(--obsidian); border-color:var(--gold); transform:translateY(-3px); }
+
+    /* Form Panel */
+    .contact-form-panel { background:var(--obsidian); padding:64px 48px; }
+    .contact-form-panel h2 { font-family:var(--ff-display); font-size:2.2rem; letter-spacing:3px; color:var(--text); margin-bottom:8px; }
+    .form-subtitle { font-family:var(--ff-serif); font-style:italic; color:var(--text-dim); font-size:1rem; margin-bottom:40px; }
+
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+    .form-group { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+    .form-group label { font-size:0.68rem; letter-spacing:3px; text-transform:uppercase; color:var(--gold); }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background:var(--surface); border:1px solid var(--gold-border); border-radius:0;
+      padding:14px 18px; font-family:var(--ff-body); font-size:0.95rem; color:var(--text);
+      outline:none; transition:border-color 0.3s, box-shadow 0.3s; width:100%;
+      -webkit-appearance:none;
+      appearance:none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color:var(--gold);
+      box-shadow:0 0 0 1px var(--gold);
+    }
+    .form-group input::placeholder, .form-group textarea::placeholder { color:var(--text-dim); }
+    .form-group textarea { resize:vertical; min-height:120px; }
+    .form-group select option { background:var(--surface2); }
+
+    /* Service type buttons */
+    .service-pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+    .service-pill {
+      padding:7px 18px; border:1px solid var(--gold-border); background:transparent;
+      color:var(--text-dim); font-size:0.72rem; letter-spacing:2px; text-transform:uppercase;
+      cursor:pointer; transition:all 0.25s; font-family:var(--ff-body);
+    }
+    .service-pill.selected, .service-pill:hover { background:var(--gold-dim); color:var(--gold); border-color:var(--gold); }
+
+    .btn-submit {
+      display:inline-flex; align-items:center; gap:12px; padding:16px 44px;
+      background:var(--gold); color:var(--obsidian);
+      font-family:var(--ff-body); font-size:0.78rem; font-weight:500; letter-spacing:3px; text-transform:uppercase;
+      border:none; cursor:pointer; transition:all 0.3s; width:100%; justify-content:center;
+      margin-top:8px; position:relative; overflow:hidden;
+    }
+    .btn-submit::before { content:''; position:absolute; inset:0; background:var(--gold-light); transform:translateX(-100%); transition:transform 0.3s; }
+    .btn-submit:hover::before { transform:translateX(0); }
+    .btn-submit:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(201,168,76,0.3); }
+    .btn-submit span { position:relative; z-index:1; }
+    .btn-submit i { position:relative; z-index:1; }
+
+    /* Success state */
+    .form-success {
+      display:none; text-align:center; padding:60px 40px;
+      border:1px solid var(--gold-border); background:var(--surface);
+    }
+    .form-success.show { display:flex; flex-direction:column; align-items:center; gap:16px; }
+    .form-success .success-icon { font-size:3rem; color:var(--gold); }
+    .form-success h3 { font-family:var(--ff-display); font-size:2rem; letter-spacing:3px; color:var(--text); }
+    .form-success p { color:var(--text-dim); font-family:var(--ff-serif); font-style:italic; font-size:1.1rem; }
+
+    /* Map placeholder */
+    .map-strip {
+      background:var(--surface); border:1px solid var(--gold-border);
+      height:200px; display:flex; align-items:center; justify-content:center;
+      flex-direction:column; gap:12px; text-align:center; padding:24px;
+      position:relative; overflow:hidden;
+    }
+    .map-strip::before {
+      content:''; position:absolute; inset:0;
+      background:
+        linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+      background-size:40px 40px;
+    }
+    .map-dot { width:12px; height:12px; background:var(--gold); border-radius:50%; box-shadow:0 0 0 4px rgba(201,168,76,0.2); animation:ping 2s ease-in-out infinite; z-index:1; }
+    @keyframes ping { 0%,100%{box-shadow:0 0 0 4px rgba(201,168,76,0.2);} 50%{box-shadow:0 0 0 12px rgba(201,168,76,0.05);} }
+    .map-label { font-size:0.72rem; letter-spacing:3px; text-transform:uppercase; color:var(--gold); z-index:1; }
+    .map-sub { font-size:0.8rem; color:var(--text-dim); z-index:1; }
+
+    /* FOOTER */
+    .footer { background:var(--obsidian); border-top:1px solid var(--gold-border); padding:80px 60px 40px; }
+    .footer-inner { max-width:1200px; margin:0 auto; }
+    .footer-top { display:grid; grid-template-columns:2fr 1fr 1fr; gap:60px; margin-bottom:60px; }
+    .footer-brand-name { font-family:var(--ff-display); font-size:3rem; letter-spacing:6px; color:var(--gold); margin-bottom:12px; }
+    .footer-brand-tagline { font-family:var(--ff-serif); font-style:italic; color:var(--text-dim); font-size:1rem; margin-bottom:28px; }
+    .footer-contact-item { display:flex; align-items:center; gap:12px; color:var(--text-dim); font-size:0.88rem; margin-bottom:12px; }
+    .footer-contact-item i { color:var(--gold); width:16px; }
+    .footer-col h4 { font-size:0.72rem; letter-spacing:4px; text-transform:uppercase; color:var(--gold); margin-bottom:24px; padding-bottom:12px; border-bottom:1px solid var(--gold-border); }
+    .footer-nav-list { list-style:none; display:flex; flex-direction:column; gap:12px; }
+    .footer-nav-list a { text-decoration:none; color:var(--text-dim); font-size:0.9rem; transition:color 0.3s, padding-left 0.3s; display:inline-block; }
+    .footer-nav-list a:hover { color:var(--gold); padding-left:6px; }
+    .footer-social-links { display:flex; gap:12px; flex-wrap:wrap; }
+    .footer-social-link { width:40px; height:40px; border:1px solid var(--gold-border); display:flex; align-items:center; justify-content:center; color:var(--text-dim); text-decoration:none; font-size:0.85rem; transition:all 0.3s; }
+    .footer-social-link:hover { background:var(--gold); color:var(--obsidian); border-color:var(--gold); transform:translateY(-3px); }
+    .footer-divider { height:1px; background:var(--gold-border); margin-bottom:32px; }
+    .footer-bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+    .footer-bottom p { color:var(--text-dim); font-size:0.8rem; }
+    .footer-bottom .made-with span { color:var(--gold); }
+
+    /* ANIMATIONS */
+    .reveal { opacity:0; transform:translateY(30px); transition:opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal.d1 { transition-delay:0.15s; } .reveal.d2 { transition-delay:0.3s; }
+
+    /* RESPONSIVE */
+    @media (max-width:900px) {
+      .navbar { padding:0 24px; }
+      .nav-links { position:fixed; top:80px; right:-100%; background:rgba(8,8,8,0.97); flex-direction:column; width:260px; height:calc(100vh - 80px); gap:0; padding:40px 32px; transition:right 0.4s; border-left:1px solid var(--gold-border); -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px); z-index:999; }
+      .nav-links.open { right:0; }
+      .nav-links a { padding:16px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+      .menu-toggle { display:flex; align-items:center; justify-content:center; }
+      .page-hero { padding:140px 24px 60px; }
+      .contact-body { padding:60px 24px; }
+      .contact-grid { grid-template-columns:1fr; }
+      .contact-info-panel, .contact-form-panel { padding:40px 24px; }
+      .form-row { grid-template-columns:1fr; }
+      .footer-top { grid-template-columns:1fr; gap:40px; }
+      .footer { padding:60px 24px 40px; }
+      .footer-bottom { flex-direction:column; text-align:center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar" id="navbar">
+    <a href="index.html" class="logo">LEON</a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <p class="page-eyebrow reveal">✦ Let's Talk</p>
+      <h1 class="reveal d1">Get In <em>Touch</em><br>& Let's Build</h1>
+      <div class="page-hero-line reveal d2"></div>
+      <p class="reveal">We'd love to hear from you. Let's bring your ideas to life together — tell us about your project and we'll craft something extraordinary.</p>
+    </div>
+  </section>
+
+  <!-- CONTACT BODY -->
+  <div class="contact-body">
+    <div class="contact-grid reveal">
+
+      <!-- INFO PANEL -->
+      <div class="contact-info-panel">
+        <div class="info-top">
+          <h2>REACH US DIRECTLY</h2>
+          <p>Whether you have a brief ready or just an idea — we're ready to listen and advise, with zero pressure.</p>
+
+          <div class="contact-detail">
+            <div class="cd-icon"><i class="fas fa-phone-alt"></i></div>
+            <div><div class="cd-label">Phone</div><div class="cd-value">+254 719 628 766</div></div>
+          </div>
+          <div class="contact-detail">
+            <div class="cd-icon"><i class="fas fa-envelope"></i></div>
+            <div><div class="cd-label">Email</div><div class="cd-value">leonkuyia@gmail.com</div></div>
+          </div>
+          <div class="contact-detail">
+            <div class="cd-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div><div class="cd-label">Location</div><div class="cd-value">Nairobi, Kenya</div></div>
+          </div>
+
+          <div class="info-hours">
+            <h4>Working Hours</h4>
+            <p>Monday – Friday<br>8:00 AM – 6:00 PM EAT</p>
+          </div>
+        </div>
+
+        <div class="info-social">
+          <a class="social-link" href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a class="social-link" href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a class="social-link" href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a class="social-link" href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a class="social-link" href="https://behance.net" target="_blank" rel="noopener" aria-label="Behance"><i class="fab fa-behance"></i></a>
+        </div>
+      </div>
+
+      <!-- FORM PANEL -->
+      <div class="contact-form-panel">
+        <h2>SEND A MESSAGE</h2>
+        <p class="form-subtitle">We typically respond within 24 hours</p>
+
+        <form id="contact-form" action="https://formspree.io/f/mkovzqel" method="POST">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input type="text" id="name" name="name" placeholder="e.g. Benson Khan" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="_replyto" placeholder="Benkhan@company.com" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>I'm interested in</label>
+            <div class="service-pills">
+              <button type="button" class="service-pill selected" data-service="Graphic Design">Graphic Design</button>
+              <button type="button" class="service-pill" data-service="Web Design">Web Design</button>
+              <button type="button" class="service-pill" data-service="Branding">Branding</button>
+              <button type="button" class="service-pill" data-service="Print">Print & Packaging</button>
+              <button type="button" class="service-pill" data-service="Other">Other</button>
+            </div>
+            <input type="hidden" id="service-hidden" name="service" value="Graphic Design">
+          </div>
+
+          <div class="form-group">
+            <label for="budget">Estimated Budget</label>
+            <select id="budget" name="budget">
+              <option value="">Select a range...</option>
+              <option>Under KES 20,000</option>
+              <option>KES 20,000 – 50,000</option>
+              <option>KES 50,000 – 100,000</option>
+              <option>KES 100,000+</option>
+              <option>Let's discuss</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Tell Us About Your Project</label>
+            <textarea id="message" name="message" placeholder="Describe your project, goals, timeline..." rows="5" required></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit">
+            <span>Send Message</span>
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </form>
+
+        <div class="form-success" id="form-success">
+          <div class="success-icon">✦</div>
+          <h3>MESSAGE SENT!</h3>
+          <p>Thank you for reaching out. We'll get back to you within 24 hours.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAP / LOCATION STRIP -->
+    <div class="map-strip reveal">
+      <div class="map-dot"></div>
+      <div class="map-label">Nairobi, Kenya</div>
+      <div class="map-sub">East Africa's Creative Capital</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand-name">LEON</div>
+          <p class="footer-brand-tagline">Crafting Seamless Web Experiences<br>& Compelling Visual Designs</p>
+          <div class="footer-contact-item"><i class="fas fa-phone-alt"></i><span>+254 719 628 766</span></div>
+          <div class="footer-contact-item"><i class="fas fa-envelope"></i><span>leonkuyia@gmail.com</span></div>
+          <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>Nairobi, Kenya</span></div>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul class="footer-nav-list">
+            <li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li>
+            <li><a href="services.html">Services</a></li><li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Follow Along</h4>
+          <div class="footer-social-links">
+            <a class="footer-social-link" href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a class="footer-social-link" href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a class="footer-social-link" href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a class="footer-social-link" href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a class="footer-social-link" href="https://behance.net" target="_blank" rel="noopener" aria-label="Behance"><i class="fab fa-behance"></i></a>
+            <a class="footer-social-link" href="https://dribbble.com" target="_blank" rel="noopener" aria-label="Dribbble"><i class="fab fa-dribbble"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-bottom">
+        <p>© 2025 LEON Graphics Design and Branding · All Rights Reserved</p>
+        <p class="made-with">Crafted with <span>Elegance ✦</span> in Nairobi</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* Navbar */
+    const nb = document.getElementById('navbar');
+    window.addEventListener('scroll', () => nb.classList.toggle('scrolled', scrollY > 60));
+    /* Mobile menu */
+    const mt = document.getElementById('menu-toggle'), nl = document.getElementById('nav-links');
+    mt.addEventListener('click', () => { nl.classList.toggle('open'); mt.innerHTML = nl.classList.contains('open') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>'; });
+    nl.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { nl.classList.remove('open'); mt.innerHTML = '<i class="fas fa-bars"></i>'; }));
+    /* Scroll reveal */
+    const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } }), {threshold:0.1});
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* Service pills */
+    const pills = document.querySelectorAll('.service-pill');
+    const hidden = document.getElementById('service-hidden');
+    pills.forEach(p => {
+      p.addEventListener('click', () => {
+        pills.forEach(x => x.classList.remove('selected'));
+        p.classList.add('selected');
+        hidden.value = p.dataset.service;
+      });
+    });
+
+    /* Form submit (Formspree AJAX) */
+    const form = document.getElementById('contact-form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('.btn-submit');
+      btn.innerHTML = '<span>Sending...</span><i class="fas fa-spinner fa-spin"></i>';
+      btn.disabled = true;
+      try {
+        const res = await fetch(form.action, { method:'POST', body:new FormData(form), headers:{'Accept':'application/json'} });
+        if (res.ok) {
+          form.style.display = 'none';
+          document.getElementById('form-success').classList.add('show');
+        } else {
+          btn.innerHTML = '<span>Send Message</span><i class="fas fa-paper-plane"></i>';
+          btn.disabled = false;
+          alert('Something went wrong. Please try again or email us directly.');
+        }
+      } catch {
+        btn.innerHTML = '<span>Send Message</span><i class="fas fa-paper-plane"></i>';
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

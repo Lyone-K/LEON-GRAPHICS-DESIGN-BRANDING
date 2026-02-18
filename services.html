@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services | LEON Graphics Design & Branding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --gold: #C9A84C; --gold-light: #E8CB7A; --gold-dim: rgba(201,168,76,0.12); --gold-border: rgba(201,168,76,0.22);
+      --obsidian: #080808; --dark: #0E0E0F; --surface: #141416; --surface2: #1A1A1D;
+      --text: #E8E4DC; --text-dim: #888880;
+      --ff-display: 'Bebas Neue', sans-serif; --ff-serif: 'Cormorant Garamond', serif; --ff-body: 'DM Sans', sans-serif;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--obsidian); color:var(--text); font-family:var(--ff-body); overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.5; }
+
+    /* NAVBAR */
+    .navbar { display:flex; justify-content:space-between; align-items:center; padding:0 60px; height:80px; background:rgba(8,8,8,0.9); position:fixed; width:100%; top:0; z-index:1000; -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px); border-bottom:1px solid var(--gold-border); transition:height 0.3s; }
+    .navbar.scrolled { height:64px; }
+    .logo { font-family:var(--ff-display); font-size:2rem; letter-spacing:6px; color:var(--gold); text-decoration:none; }
+    .nav-links { display:flex; gap:40px; }
+    .nav-links a { text-decoration:none; color:var(--text-dim); font-size:0.78rem; letter-spacing:2px; text-transform:uppercase; transition:color 0.3s; position:relative; padding-bottom:4px; }
+    .nav-links a::after { content:''; position:absolute; bottom:0; left:0; width:0; height:1px; background:var(--gold); transition:width 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--gold); }
+    .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+    .menu-toggle { display:none; background:none; border:1px solid var(--gold-border); color:var(--gold); width:40px; height:40px; cursor:pointer; font-size:1.1rem; border-radius:4px; transition:background 0.3s; }
+    .menu-toggle:hover { background:var(--gold-dim); }
+
+    /* PAGE HERO */
+    .page-hero { padding:160px 60px 80px; background:var(--dark); position:relative; overflow:hidden; }
+    .page-hero::before { content:'SERVICES'; position:absolute; font-family:var(--ff-display); font-size:16vw; color:rgba(201,168,76,0.03); top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; letter-spacing:12px; white-space:nowrap; }
+    .page-hero-inner { max-width:1200px; margin:0 auto; position:relative; z-index:1; }
+    .page-eyebrow { font-size:0.72rem; letter-spacing:5px; text-transform:uppercase; color:var(--gold); margin-bottom:20px; }
+    .page-hero h1 { font-family:var(--ff-display); font-size:clamp(3.5rem,8vw,7rem); letter-spacing:3px; line-height:0.95; color:var(--text); }
+    .page-hero h1 em { font-family:var(--ff-serif); font-style:italic; color:var(--gold); font-size:0.7em; }
+    .page-hero-line { width:80px; height:1px; background:var(--gold); margin:32px 0; }
+    .page-hero p { font-family:var(--ff-serif); font-size:1.3rem; font-weight:300; color:var(--text-dim); max-width:600px; line-height:1.7; }
+
+    /* SERVICES BODY */
+    .services-body { padding:80px 60px; max-width:1200px; margin:0 auto; }
+
+    /* Featured services — large cards */
+    .services-featured { display:grid; grid-template-columns:1fr 1fr; gap:2px; background:var(--gold-border); border:1px solid var(--gold-border); margin-bottom:2px; }
+    .service-feature-card {
+      background:var(--obsidian); padding:60px 48px; position:relative; overflow:hidden;
+      transition:background 0.4s;
+    }
+    .service-feature-card:hover { background:var(--surface); }
+    .sf-number { font-family:var(--ff-display); font-size:6rem; color:var(--gold); opacity:0.06; line-height:1; position:absolute; top:24px; right:32px; }
+    .sf-icon { font-size:2.2rem; margin-bottom:28px; display:block; }
+    .sf-title { font-family:var(--ff-display); font-size:2rem; letter-spacing:3px; color:var(--gold); margin-bottom:16px; }
+    .sf-desc { color:var(--text-dim); font-size:0.95rem; line-height:1.8; margin-bottom:28px; max-width:400px; }
+    .sf-tags { display:flex; flex-wrap:wrap; gap:8px; }
+    .sf-tag { font-size:0.68rem; letter-spacing:2px; text-transform:uppercase; color:var(--gold); border:1px solid var(--gold-border); padding:4px 12px; }
+    .sf-line { position:absolute; bottom:0; left:0; width:0; height:2px; background:linear-gradient(to right, var(--gold), var(--gold-light)); transition:width 0.5s ease; }
+    .service-feature-card:hover .sf-line { width:100%; }
+
+    /* Process section */
+    .process-section { padding:80px 0; }
+    .process-section h2 { font-family:var(--ff-display); font-size:3rem; letter-spacing:3px; color:var(--text); margin-bottom:8px; }
+    .process-section .sub { font-family:var(--ff-serif); font-style:italic; color:var(--text-dim); font-size:1.1rem; margin-bottom:60px; }
+    .process-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--gold-border); border:1px solid var(--gold-border); }
+    .process-step { background:var(--obsidian); padding:40px 28px; text-align:center; transition:background 0.3s; }
+    .process-step:hover { background:var(--surface); }
+    .ps-num { font-family:var(--ff-display); font-size:3.5rem; color:var(--gold); opacity:0.2; line-height:1; margin-bottom:12px; }
+    .ps-title { font-family:var(--ff-display); font-size:1.2rem; letter-spacing:3px; color:var(--gold); margin-bottom:12px; }
+    .ps-desc { color:var(--text-dim); font-size:0.85rem; line-height:1.7; }
+
+    /* Pricing teaser */
+    .pricing-teaser { margin-top:80px; background:var(--surface); border:1px solid var(--gold-border); padding:64px 48px; display:flex; align-items:center; justify-content:space-between; gap:40px; flex-wrap:wrap; }
+    .pt-text h3 { font-family:var(--ff-display); font-size:2.5rem; letter-spacing:3px; color:var(--text); margin-bottom:12px; }
+    .pt-text p { color:var(--text-dim); font-size:1rem; max-width:500px; line-height:1.7; }
+    .btn-primary { display:inline-flex; align-items:center; gap:10px; padding:14px 36px; background:var(--gold); color:var(--obsidian); font-family:var(--ff-body); font-size:0.78rem; font-weight:500; letter-spacing:3px; text-transform:uppercase; text-decoration:none; transition:all 0.3s; position:relative; overflow:hidden; }
+    .btn-primary::before { content:''; position:absolute; inset:0; background:var(--gold-light); transform:translateX(-100%); transition:transform 0.3s; }
+    .btn-primary:hover::before { transform:translateX(0); }
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(201,168,76,0.3); }
+    .btn-primary span { position:relative; z-index:1; }
+
+    /* FOOTER */
+    .footer { background:var(--obsidian); border-top:1px solid var(--gold-border); padding:80px 60px 40px; }
+    .footer-inner { max-width:1200px; margin:0 auto; }
+    .footer-top { display:grid; grid-template-columns:2fr 1fr 1fr; gap:60px; margin-bottom:60px; }
+    .footer-brand-name { font-family:var(--ff-display); font-size:3rem; letter-spacing:6px; color:var(--gold); margin-bottom:12px; }
+    .footer-brand-tagline { font-family:var(--ff-serif); font-style:italic; color:var(--text-dim); font-size:1rem; margin-bottom:28px; }
+    .footer-contact-item { display:flex; align-items:center; gap:12px; color:var(--text-dim); font-size:0.88rem; margin-bottom:12px; }
+    .footer-contact-item i { color:var(--gold); width:16px; }
+    .footer-col h4 { font-size:0.72rem; letter-spacing:4px; text-transform:uppercase; color:var(--gold); margin-bottom:24px; padding-bottom:12px; border-bottom:1px solid var(--gold-border); }
+    .footer-nav-list { list-style:none; display:flex; flex-direction:column; gap:12px; }
+    .footer-nav-list a { text-decoration:none; color:var(--text-dim); font-size:0.9rem; transition:color 0.3s, padding-left 0.3s; display:inline-block; }
+    .footer-nav-list a:hover { color:var(--gold); padding-left:6px; }
+    .social-links { display:flex; gap:12px; flex-wrap:wrap; }
+    .social-link { width:40px; height:40px; border:1px solid var(--gold-border); display:flex; align-items:center; justify-content:center; color:var(--text-dim); text-decoration:none; font-size:0.85rem; transition:all 0.3s; }
+    .social-link:hover { background:var(--gold); color:var(--obsidian); border-color:var(--gold); transform:translateY(-3px); }
+    .footer-divider { height:1px; background:var(--gold-border); margin-bottom:32px; }
+    .footer-bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+    .footer-bottom p { color:var(--text-dim); font-size:0.8rem; }
+    .footer-bottom .made-with span { color:var(--gold); }
+
+    /* ANIMATIONS */
+    .reveal { opacity:0; transform:translateY(30px); transition:opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal.d1 { transition-delay:0.1s; } .reveal.d2 { transition-delay:0.2s; } .reveal.d3 { transition-delay:0.3s; }
+
+    /* RESPONSIVE */
+    @media (max-width:900px) {
+      .navbar { padding:0 24px; }
+      .nav-links { position:fixed; top:80px; right:-100%; background:rgba(8,8,8,0.97); flex-direction:column; width:260px; height:calc(100vh - 80px); gap:0; padding:40px 32px; transition:right 0.4s; border-left:1px solid var(--gold-border); -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px); z-index:999; }
+      .nav-links.open { right:0; }
+      .nav-links a { padding:16px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+      .menu-toggle { display:flex; align-items:center; justify-content:center; }
+      .page-hero { padding:140px 24px 60px; }
+      .services-body { padding:60px 24px; }
+      .services-featured { grid-template-columns:1fr; }
+      .process-steps { grid-template-columns:1fr 1fr; }
+      .pricing-teaser { flex-direction:column; text-align:center; padding:40px 24px; }
+      .footer-top { grid-template-columns:1fr; gap:40px; }
+      .footer { padding:60px 24px 40px; }
+      .footer-bottom { flex-direction:column; text-align:center; }
+    }
+    @media (max-width:600px) { .process-steps { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar" id="navbar">
+    <a href="index.html" class="logo">LEON</a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    <nav class="nav-links" id="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html" class="active">Services</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <p class="page-eyebrow reveal">✦ What We Do</p>
+      <h1 class="reveal d1">Creative <em>Services</em><br>Built to<br>Elevate</h1>
+      <div class="page-hero-line reveal d2"></div>
+      <p class="reveal d3">We combine design expertise with strategy and technology to craft powerful visual identities and digital experiences.</p>
+    </div>
+  </section>
+
+  <!-- SERVICES BODY -->
+  <div class="services-body">
+
+    <!-- Featured Services Grid -->
+    <div class="services-featured reveal">
+      <div class="service-feature-card">
+        <div class="sf-number">01</div>
+        <span class="sf-icon">🎨</span>
+        <div class="sf-title">Graphic Design</div>
+        <p class="sf-desc">From logos to full brand identities — we create stunning visuals that capture attention and communicate your story with clarity and power.</p>
+        <div class="sf-tags">
+          <span class="sf-tag">Logo Design</span>
+          <span class="sf-tag">Illustrations</span>
+          <span class="sf-tag">Social Media</span>
+          <span class="sf-tag">Infographics</span>
+        </div>
+        <div class="sf-line"></div>
+      </div>
+      <div class="service-feature-card">
+        <div class="sf-number">02</div>
+        <span class="sf-icon">💻</span>
+        <div class="sf-title">Web Design & Dev</div>
+        <p class="sf-desc">Responsive, fast, and visually stunning websites that reflect your business goals and connect deeply with your audience across all devices.</p>
+        <div class="sf-tags">
+          <span class="sf-tag">UI/UX Design</span>
+          <span class="sf-tag">Frontend Dev</span>
+          <span class="sf-tag">E-Commerce</span>
+          <span class="sf-tag">CMS</span>
+        </div>
+        <div class="sf-line"></div>
+      </div>
+      <div class="service-feature-card">
+        <div class="sf-number">03</div>
+        <span class="sf-icon">🚀</span>
+        <div class="sf-title">Brand Strategy</div>
+        <p class="sf-desc">Build a strong brand foundation with strategic positioning, cohesive design systems, and consistent messaging that resonates and endures.</p>
+        <div class="sf-tags">
+          <span class="sf-tag">Brand Identity</span>
+          <span class="sf-tag">Style Guides</span>
+          <span class="sf-tag">Positioning</span>
+          <span class="sf-tag">Naming</span>
+        </div>
+        <div class="sf-line"></div>
+      </div>
+      <div class="service-feature-card">
+        <div class="sf-number">04</div>
+        <span class="sf-icon">🖨️</span>
+        <div class="sf-title">Print & Packaging</div>
+        <p class="sf-desc">Elevating brands through thoughtful prints and purposeful packaging — turning design stories into beautiful, tangible print realities.</p>
+        <div class="sf-tags">
+          <span class="sf-tag">Business Cards</span>
+          <span class="sf-tag">Packaging</span>
+          <span class="sf-tag">Brochures</span>
+          <span class="sf-tag">Banners</span>
+        </div>
+        <div class="sf-line"></div>
+      </div>
+    </div>
+
+    <!-- Process -->
+    <div class="process-section">
+      <h2 class="reveal">OUR PROCESS</h2>
+      <p class="sub reveal d1">How we go from brief to brilliant</p>
+      <div class="process-steps reveal d2">
+        <div class="process-step">
+          <div class="ps-num">01</div>
+          <div class="ps-title">Discover</div>
+          <div class="ps-desc">Deep dive into your brand, goals, audience, and competitive landscape.</div>
+        </div>
+        <div class="process-step">
+          <div class="ps-num">02</div>
+          <div class="ps-title">Strategise</div>
+          <div class="ps-desc">Build a creative direction and strategic framework that guides every decision.</div>
+        </div>
+        <div class="process-step">
+          <div class="ps-num">03</div>
+          <div class="ps-title">Design</div>
+          <div class="ps-desc">Craft exceptional visuals that bring the strategy to life with precision and flair.</div>
+        </div>
+        <div class="process-step">
+          <div class="ps-num">04</div>
+          <div class="ps-title">Deliver</div>
+          <div class="ps-desc">Refined, production-ready files with full support and zero-compromise quality.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pricing Teaser -->
+    <div class="pricing-teaser reveal">
+      <div class="pt-text">
+        <h3>READY TO START YOUR PROJECT?</h3>
+        <p>Every great brand begins with a conversation. Tell us about your vision and we'll craft a tailored proposal — no obligation, just ideas.</p>
+      </div>
+      <a href="contact.html" class="btn-primary">
+        <span>Get a Free Quote</span>
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+  </div><!-- /services-body -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand-name">LEON</div>
+          <p class="footer-brand-tagline">Crafting Seamless Web Experiences<br>& Compelling Visual Designs</p>
+          <div class="footer-contact-item"><i class="fas fa-phone-alt"></i><span>+254 719 628 766</span></div>
+          <div class="footer-contact-item"><i class="fas fa-envelope"></i><span>leonkuyia@gmail.com</span></div>
+          <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>Nairobi, Kenya</span></div>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul class="footer-nav-list">
+            <li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li>
+            <li><a href="services.html">Services</a></li><li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Follow Along</h4>
+          <div class="social-links">
+            <a class="social-link" href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a class="social-link" href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a class="social-link" href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a class="social-link" href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a class="social-link" href="https://behance.net" target="_blank" rel="noopener" aria-label="Behance"><i class="fab fa-behance"></i></a>
+            <a class="social-link" href="https://dribbble.com" target="_blank" rel="noopener" aria-label="Dribbble"><i class="fab fa-dribbble"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-bottom">
+        <p>© 2025 LEON Graphics Design and Branding · All Rights Reserved</p>
+        <p class="made-with">Crafted with <span>Elegance ✦</span> in Nairobi</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const nb = document.getElementById('navbar');
+    window.addEventListener('scroll', () => nb.classList.toggle('scrolled', scrollY > 60));
+    const mt = document.getElementById('menu-toggle'), nl = document.getElementById('nav-links');
+    mt.addEventListener('click', () => { nl.classList.toggle('open'); mt.innerHTML = nl.classList.contains('open') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>'; });
+    nl.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { nl.classList.remove('open'); mt.innerHTML = '<i class="fas fa-bars"></i>'; }));
+    const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } }), {threshold:0.1});
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
