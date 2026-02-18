@@ -91,17 +91,7 @@
       height: 100%;
       object-fit: cover;   /* 🔥 this is the magic */
     }
-
-    .p-item:hover .p-placeholder { background:var(--surface2); }
-    .p-placeholder-icon { font-size:2.5rem; opacity:0.2; }
-    .p-placeholder-tag { font-size:0.65rem; letter-spacing:3px; text-transform:uppercase; color:var(--gold); opacity:0.5; }
-
-    .p-overlay {
-      position:absolute; inset:0;
-      background:linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.3) 50%, transparent 100%);
-      opacity:0; display:flex; flex-direction:column; justify-content:flex-end; padding:28px;
-      transition:opacity 0.4s ease;
-    }
+    
     .p-item:hover .p-overlay { opacity:1; }
     .p-category { font-size:0.65rem; letter-spacing:4px; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
     .p-title { font-family:var(--ff-display); font-size:1.4rem; letter-spacing:2px; color:var(--text); margin-bottom:8px; }
@@ -360,6 +350,7 @@
   </script>
 </body>
 </html>
+
 
 
 
