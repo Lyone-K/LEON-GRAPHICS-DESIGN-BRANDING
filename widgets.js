@@ -14,7 +14,7 @@
       agentName: 'Leon Kuyia',
       agentRole: 'Creative Director · LEON Graphics',
       agentAvatar: 'LK',
-      onlineHours: { start: 8, end: 18 },
+      onlineHours: { start: 0, end: 24 }, // ← Always online (change to e.g. {start:8, end:18} for business hours only)
       greeting: "👋 Hi there! Thanks for reaching out to LEON Graphics Design & Branding.\n\nHow can we help bring your vision to life today?",
       awayMessage: "Hey! We're currently offline but we'll get back to you as soon as possible — usually within a few hours.\n\nLeave your message below and we'll reply on WhatsApp! 📲",
       quickReplies: [
