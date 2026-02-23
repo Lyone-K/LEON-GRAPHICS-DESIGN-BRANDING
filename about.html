@@ -219,7 +219,6 @@
     }
   </style>
 </head>
-  <script src="widgets.js"></script>
 <body>
 
   <!-- NAVBAR -->
@@ -385,9 +384,11 @@
     const sio = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.style.width = e.target.dataset.width + '%'; sio.unobserve(e.target); } }), {threshold:0.5});
     document.querySelectorAll('.skill-fill').forEach(el => sio.observe(el));
   </script>
+  <script src="widgets.js"></script>
 </body>
 
 </html>
+
 
 
 
