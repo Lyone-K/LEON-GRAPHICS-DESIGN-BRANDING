@@ -61,7 +61,7 @@ Be concise, warm, and professional. Reflect LEON's brand: creative, confident, s
 
     /* FABs */
     .lw-fab {
-      width:58px; height:58px; border-radius:50%;
+      width:36px; height:36px; border-radius:50%;
       display:flex; align-items:center; justify-content:center;
       cursor:pointer; border:none; position:relative;
       transition:transform 0.3s ease, box-shadow 0.3s ease;
