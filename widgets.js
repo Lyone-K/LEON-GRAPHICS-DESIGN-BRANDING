@@ -11,7 +11,7 @@
   const CONFIG = {
     whatsapp: {
       phone: '254719628766',
-      agentName: 'Leon Kuyia',
+      agentName: 'Leon NKuyia',
       agentRole: 'Creative Director · LEON Graphics',
       agentAvatar: 'LK',
       onlineHours: { start: 0, end: 24 }, // ← Always online (change to e.g. {start:8, end:18} for business hours only)
