@@ -1,586 +1,600 @@
 // ============================================================
-//  LEON Graphics — widgets.js
-//  Drop this script into any page BEFORE </body>
-//  Injects: 1) WhatsApp floating button
-//           2) LEON AI Assistant chat widget (Claude-powered)
+//  LEON Graphics — widgets.js  (v3)
+//  1) Embedded WhatsApp Chat Panel (on-site, no redirect)
+//  2) LEON AI Assistant (Claude-powered)
+//  Usage: <script src="widgets.js"></script> before </body>
 // ============================================================
 
 (function () {
   'use strict';
 
-  // ── CONFIG ──────────────────────────────────────────────────
   const CONFIG = {
     whatsapp: {
-      phone: '254719628766',        // ← your number, no + or spaces
-      message: 'Hi LEON! I visited your website and I\'d love to discuss a project with you.',
-      tooltip: 'Chat on WhatsApp'
+      phone: '254719628766',
+      agentName: 'Leon Kuyia',
+      agentRole: 'Creative Director · LEON Graphics',
+      agentAvatar: 'LK',
+      onlineHours: { start: 8, end: 18 },
+      greeting: "👋 Hi there! Thanks for reaching out to LEON Graphics Design & Branding.\n\nHow can we help bring your vision to life today?",
+      awayMessage: "Hey! We're currently offline but we'll get back to you as soon as possible — usually within a few hours.\n\nLeave your message below and we'll reply on WhatsApp! 📲",
+      quickReplies: [
+        { label: '🎨 Graphic Design', text: "Hi! I'm interested in graphic design services." },
+        { label: '💻 Web Design',     text: "Hi! I need a website designed or developed." },
+        { label: '🚀 Branding',       text: "Hi! I'd like help with branding and identity." },
+        { label: '💰 Get a Quote',    text: "Hi! I'd like to get a quote for a project." },
+      ]
     },
     ai: {
       name: 'LEON AI',
-      subtitle: 'Creative Design Assistant',
-      greeting: "Hello! I'm LEON's AI assistant. I can answer questions about our design services, pricing, timelines, and more. How can I help you today?",
-      systemPrompt: `You are LEON AI, the official assistant for LEON Graphics Design & Branding — a premium creative studio based in Nairobi, Kenya. You help potential clients learn about LEON's services, pricing, process, and portfolio.
+      subtitle: 'Design Assistant · Always Online',
+      greeting: "Hello! I'm LEON's AI assistant. I can instantly answer questions about our design services, pricing, timelines, and more.\n\nWhat can I help you with?",
+      systemPrompt: `You are LEON AI, the official assistant for LEON Graphics Design & Branding — a premium creative studio in Nairobi, Kenya.
 
-LEON's Services:
-- Graphic Design (logos, brand identity, illustrations, social media graphics) — from KES 5,000
-- Web Design & Development (responsive websites, UI/UX, e-commerce, CMS) — from KES 25,000  
-- Brand Strategy (positioning, style guides, naming, full brand systems) — from KES 15,000
-- Print & Packaging (business cards, brochures, banners, packaging) — from KES 3,000
+SERVICES & PRICING:
+- Graphic Design (logos, brand identity, illustrations, social media) — from KES 5,000
+- Web Design & Development (responsive sites, UI/UX, e-commerce) — from KES 25,000
+- Brand Strategy (positioning, style guides, naming) — from KES 15,000
+- Print & Packaging (cards, brochures, banners, packaging) — from KES 3,000
 
-Contact: +254 719 628 766 | leonkuyia@gmail.com | Nairobi, Kenya
-Working hours: Monday–Friday, 8:00 AM – 6:00 PM EAT
+PROCESS: Discovery → Strategy → Design → Delivery
+TIMELINE: Logo 3–7 days | Website 2–4 weeks | Full branding 3–6 weeks
+CONTACT: +254 719 628 766 | leonkuyia@gmail.com | Nairobi, Kenya
+HOURS: Mon–Fri, 8:00 AM – 6:00 PM EAT
 
-Keep answers concise, friendly, and professional. Reflect LEON's brand voice: creative, confident, and sophisticated. If asked something you don't know, encourage them to contact LEON directly. Never make up specific project details or client names.`
+Be concise, warm, and professional. Reflect LEON's brand: creative, confident, sophisticated. If you cannot answer, direct them to contact LEON directly.`
     }
   };
 
-  // ── INJECT FONTS & STYLES ───────────────────────────────────
-  const style = document.createElement('style');
-  style.textContent = `
-    /* ── Floating Buttons Shell ── */
-    .leon-widgets {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 14px;
-      z-index: 99000;
-      font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  function isOnline() {
+    const n = new Date(), d = n.getDay(), h = n.getHours();
+    return d >= 1 && d <= 5 && h >= CONFIG.whatsapp.onlineHours.start && h < CONFIG.whatsapp.onlineHours.end;
+  }
+
+  // ── Styles ───────────────────────────────────────────────
+  const css = document.createElement('style');
+  css.textContent = `
+    .lw-wrap {
+      position:fixed; bottom:32px; right:32px;
+      display:flex; flex-direction:column; align-items:flex-end; gap:14px;
+      z-index:99000; font-family:'DM Sans','Segoe UI',sans-serif;
     }
 
-    /* ── WhatsApp Button ── */
-    .leon-wa-btn {
-      width: 56px; height: 56px;
-      background: #25D366;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      text-decoration: none;
-      position: relative;
+    /* FABs */
+    .lw-fab {
+      width:58px; height:58px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; border:none; position:relative;
+      transition:transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .leon-wa-btn:hover {
-      transform: scale(1.12) translateY(-3px);
-      box-shadow: 0 8px 32px rgba(37,211,102,0.55);
+    .lw-fab:hover { transform:scale(1.1) translateY(-3px); }
+    .lw-fab-tip {
+      position:absolute; right:70px; top:50%; transform:translateY(-50%);
+      background:rgba(8,8,8,0.93); color:#E8E4DC;
+      font-size:0.72rem; letter-spacing:1px; padding:6px 14px;
+      white-space:nowrap; pointer-events:none; opacity:0;
+      transition:opacity 0.2s; border:1px solid rgba(201,168,76,0.25);
     }
-    .leon-wa-btn svg { width: 28px; height: 28px; fill: #fff; }
-    .leon-wa-tooltip {
-      position: absolute;
-      right: 68px; top: 50%;
-      transform: translateY(-50%);
-      background: rgba(8,8,8,0.92);
-      color: #E8E4DC;
-      font-size: 0.75rem;
-      letter-spacing: 1px;
-      padding: 6px 14px;
-      white-space: nowrap;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.25s;
-      border: 1px solid rgba(201,168,76,0.25);
-    }
-    .leon-wa-btn:hover .leon-wa-tooltip { opacity: 1; }
+    .lw-fab:hover .lw-fab-tip { opacity:1; }
 
-    /* Pulse ring */
-    .leon-wa-btn::before {
-      content: '';
-      position: absolute; inset: -6px;
-      border-radius: 50%;
-      border: 2px solid rgba(37,211,102,0.4);
-      animation: waPulse 2.5s ease-in-out infinite;
+    /* WA FAB */
+    .lw-wa-fab { background:#25D366; box-shadow:0 4px 20px rgba(37,211,102,0.45); }
+    .lw-wa-fab:hover { box-shadow:0 8px 32px rgba(37,211,102,0.6); }
+    .lw-wa-fab svg { width:28px; height:28px; fill:#fff; }
+    .lw-wa-fab::before {
+      content:''; position:absolute; inset:-8px; border-radius:50%;
+      border:2px solid rgba(37,211,102,0.35);
+      animation:lwWaPulse 2.5s ease-in-out infinite;
     }
-    @keyframes waPulse {
-      0%,100% { transform: scale(1); opacity: 0.6; }
-      50% { transform: scale(1.25); opacity: 0; }
-    }
+    @keyframes lwWaPulse { 0%,100%{transform:scale(1);opacity:.6;} 50%{transform:scale(1.3);opacity:0;} }
 
-    /* ── AI Chat Button ── */
-    .leon-ai-btn {
-      width: 56px; height: 56px;
-      background: linear-gradient(135deg, #C9A84C, #E8CB7A);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(201,168,76,0.45);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: none;
-      position: relative;
+    /* AI FAB */
+    .lw-ai-fab { background:linear-gradient(135deg,#C9A84C,#E8CB7A); box-shadow:0 4px 20px rgba(201,168,76,0.45); }
+    .lw-ai-fab:hover { box-shadow:0 8px 32px rgba(201,168,76,0.6); }
+    .lw-ai-fab svg { width:26px; height:26px; }
+    .lw-notif {
+      position:absolute; top:4px; right:4px;
+      width:10px; height:10px; background:#ff4757;
+      border-radius:50%; border:2px solid #080808;
+      animation:lwNotif 0.4s ease 1.2s both;
     }
-    .leon-ai-btn:hover {
-      transform: scale(1.12) translateY(-3px);
-      box-shadow: 0 8px 32px rgba(201,168,76,0.6);
-    }
-    .leon-ai-btn svg { width: 26px; height: 26px; }
-    .leon-ai-tooltip {
-      position: absolute;
-      right: 68px; top: 50%;
-      transform: translateY(-50%);
-      background: rgba(8,8,8,0.92);
-      color: #E8E4DC;
-      font-size: 0.75rem;
-      letter-spacing: 1px;
-      padding: 6px 14px;
-      white-space: nowrap;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.25s;
-      border: 1px solid rgba(201,168,76,0.25);
-    }
-    .leon-ai-btn:hover .leon-ai-tooltip { opacity: 1; }
+    @keyframes lwNotif { from{transform:scale(0);} to{transform:scale(1);} }
 
-    /* Notification dot */
-    .leon-ai-dot {
-      position: absolute;
-      top: 3px; right: 3px;
-      width: 10px; height: 10px;
-      background: #ff4757;
-      border-radius: 50%;
-      border: 2px solid #080808;
-      animation: dotPop 0.4s ease 1s both;
+    /* Shared panel */
+    .lw-panel {
+      position:fixed; bottom:108px; right:32px;
+      width:370px; display:flex; flex-direction:column;
+      z-index:98998; overflow:hidden;
+      box-shadow:0 24px 80px rgba(0,0,0,0.75);
+      transform:translateY(24px) scale(0.96);
+      opacity:0; pointer-events:none;
+      transition:all 0.38s cubic-bezier(0.34,1.4,0.64,1);
+      max-height:540px;
     }
-    @keyframes dotPop { from { transform: scale(0); } to { transform: scale(1); } }
+    .lw-panel.open { transform:translateY(0) scale(1); opacity:1; pointer-events:all; }
 
-    /* ── Chat Window ── */
-    .leon-chat-window {
-      position: fixed;
-      bottom: 110px; right: 32px;
-      width: 380px;
-      max-height: 560px;
-      background: #0E0E0F;
-      border: 1px solid rgba(201,168,76,0.25);
-      box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,168,76,0.08);
-      display: flex; flex-direction: column;
-      z-index: 98999;
-      transform: translateY(20px) scale(0.95);
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
-      overflow: hidden;
+    /* ══ WHATSAPP PANEL ══ */
+    .lw-wa-panel { border:1px solid rgba(37,211,102,0.2); background:#ECE5DD; z-index:98999; }
+
+    .lw-wa-hd {
+      background:#075E54; padding:14px 18px;
+      display:flex; align-items:center; gap:14px; flex-shrink:0;
     }
-    .leon-chat-window.open {
-      transform: translateY(0) scale(1);
-      opacity: 1;
-      pointer-events: all;
+    .lw-wa-av-wrap { position:relative; flex-shrink:0; }
+    .lw-wa-av {
+      width:44px; height:44px; border-radius:50%;
+      background:linear-gradient(135deg,#25D366,#128C7E);
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.78rem; font-weight:700; color:#fff; letter-spacing:1px;
+    }
+    .lw-wa-status-dot {
+      position:absolute; bottom:1px; right:1px;
+      width:10px; height:10px; border-radius:50%; border:2px solid #075E54;
+      background:#25D366;
+    }
+    .lw-wa-status-dot.away { background:#ffa502; }
+    .lw-wa-hd-info { flex:1; }
+    .lw-wa-hd-name { font-size:0.95rem; font-weight:600; color:#fff; }
+    .lw-wa-hd-sub { font-size:0.7rem; color:rgba(255,255,255,0.7); margin-top:2px; }
+    .lw-wa-hd-btns { display:flex; gap:14px; align-items:center; }
+    .lw-wa-hd-btns a,
+    .lw-wa-hd-btn {
+      color:rgba(255,255,255,0.75); font-size:1rem; cursor:pointer;
+      transition:color 0.2s; background:none; border:none; text-decoration:none;
+      display:flex; align-items:center;
+    }
+    .lw-wa-hd-btns a:hover, .lw-wa-hd-btn:hover { color:#fff; }
+
+    /* Chat area — WhatsApp tile bg */
+    .lw-wa-body {
+      flex:1; overflow-y:auto;
+      background-color:#ECE5DD;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect fill='%23e4ddd5' width='60' height='60'/%3E%3Ccircle fill='%23d9d2c9' cx='30' cy='30' r='0.8'/%3E%3C/svg%3E");
+      padding:12px 14px;
+      display:flex; flex-direction:column; gap:5px;
+      scrollbar-width:thin; scrollbar-color:#ccc transparent;
+    }
+    .lw-wa-body::-webkit-scrollbar { width:3px; }
+    .lw-wa-body::-webkit-scrollbar-thumb { background:#ccc; }
+
+    .lw-wa-date { text-align:center; margin:6px 0; }
+    .lw-wa-date span {
+      background:rgba(255,255,255,0.82); color:#667781;
+      font-size:0.68rem; padding:3px 12px; border-radius:6px;
+      box-shadow:0 1px 2px rgba(0,0,0,0.1);
     }
 
-    /* Chat header */
-    .leon-chat-header {
-      background: linear-gradient(135deg, #141416, #1A1A1D);
-      border-bottom: 1px solid rgba(201,168,76,0.2);
-      padding: 18px 20px;
-      display: flex; align-items: center; gap: 14px;
-      flex-shrink: 0;
-    }
-    .leon-chat-avatar {
-      width: 42px; height: 42px;
-      background: linear-gradient(135deg, #C9A84C, #E8CB7A);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem; font-weight: 700; color: #080808;
-      font-family: 'Bebas Neue', sans-serif;
-      letter-spacing: 1px;
-      flex-shrink: 0;
-    }
-    .leon-chat-header-info { flex: 1; }
-    .leon-chat-header-name {
-      font-size: 0.9rem; font-weight: 600;
-      color: #E8E4DC; letter-spacing: 1px;
-    }
-    .leon-chat-header-status {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 0.72rem; color: #888880; margin-top: 2px;
-    }
-    .leon-status-dot {
-      width: 6px; height: 6px;
-      background: #25D366; border-radius: 50%;
-      animation: statusBlink 2s ease-in-out infinite;
-    }
-    @keyframes statusBlink { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
-    .leon-chat-close {
-      background: none; border: none; cursor: pointer;
-      color: #888880; font-size: 1.1rem;
-      transition: color 0.2s; padding: 4px;
-    }
-    .leon-chat-close:hover { color: #C9A84C; }
+    /* Bubbles */
+    .lw-wa-msg { display:flex; align-items:flex-end; animation:lwMsgIn 0.22s ease; }
+    .lw-wa-msg.out { justify-content:flex-end; }
+    @keyframes lwMsgIn { from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:translateY(0);} }
 
-    /* Messages area */
-    .leon-chat-messages {
-      flex: 1; overflow-y: auto; padding: 20px 16px;
-      display: flex; flex-direction: column; gap: 14px;
-      scrollbar-width: thin; scrollbar-color: rgba(201,168,76,0.2) transparent;
+    .lw-wa-bubble {
+      max-width:82%; padding:8px 12px 5px; border-radius:8px;
+      box-shadow:0 1px 2px rgba(0,0,0,0.15);
+      font-size:0.875rem; line-height:1.5; color:#111;
     }
-    .leon-chat-messages::-webkit-scrollbar { width: 4px; }
-    .leon-chat-messages::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.2); border-radius: 2px; }
+    .lw-wa-bubble.in  { background:#fff; border-top-left-radius:0; }
+    .lw-wa-bubble.out { background:#DCF8C6; border-top-right-radius:0; }
+    .lw-wa-bubble pre { white-space:pre-wrap; font-family:inherit; font-size:inherit; margin:0; }
+    .lw-wa-meta { display:flex; justify-content:flex-end; align-items:center; gap:3px; margin-top:2px; }
+    .lw-wa-time { font-size:0.62rem; color:#999; }
+    .lw-wa-tick { font-size:0.68rem; color:#53bdeb; }
 
-    /* Message bubbles */
-    .leon-msg {
-      display: flex; gap: 10px; align-items: flex-end;
-      animation: msgIn 0.3s ease;
+    /* Typing */
+    .lw-wa-typing { display:flex; }
+    .lw-wa-typing-bub {
+      background:#fff; padding:11px 15px; border-radius:8px;
+      border-top-left-radius:0; box-shadow:0 1px 2px rgba(0,0,0,0.1);
+      display:flex; gap:5px; align-items:center;
     }
-    @keyframes msgIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-    .leon-msg.user { flex-direction: row-reverse; }
-
-    .leon-msg-avatar {
-      width: 28px; height: 28px; border-radius: 50%;
-      background: linear-gradient(135deg, #C9A84C, #E8CB7A);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.65rem; color: #080808; font-weight: 700;
-      flex-shrink: 0;
+    .lw-wa-typing-bub span {
+      width:7px; height:7px; background:#aaa; border-radius:50%;
+      animation:lwWaTyping 1.4s infinite;
     }
-    .leon-msg.user .leon-msg-avatar {
-      background: #1A1A1D; border: 1px solid rgba(201,168,76,0.3);
-      color: #C9A84C;
-    }
-
-    .leon-msg-bubble {
-      max-width: 78%;
-      padding: 10px 14px;
-      font-size: 0.875rem;
-      line-height: 1.6;
-      color: #E8E4DC;
-    }
-    .leon-msg.ai .leon-msg-bubble {
-      background: #141416;
-      border: 1px solid rgba(201,168,76,0.15);
-      border-bottom-left-radius: 0;
-    }
-    .leon-msg.user .leon-msg-bubble {
-      background: linear-gradient(135deg, rgba(201,168,76,0.2), rgba(232,203,122,0.12));
-      border: 1px solid rgba(201,168,76,0.3);
-      border-bottom-right-radius: 0;
-      text-align: right;
-    }
-    .leon-msg-time {
-      font-size: 0.65rem; color: #555;
-      margin-top: 4px;
-    }
-
-    /* Typing indicator */
-    .leon-typing {
-      display: flex; gap: 10px; align-items: flex-end;
-    }
-    .leon-typing-dots {
-      background: #141416; border: 1px solid rgba(201,168,76,0.15);
-      padding: 12px 16px; display: flex; gap: 5px; align-items: center;
-    }
-    .leon-typing-dots span {
-      width: 6px; height: 6px; background: #C9A84C;
-      border-radius: 50%; animation: typingBounce 1.4s ease-in-out infinite;
-    }
-    .leon-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-    .leon-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes typingBounce { 0%,60%,100%{transform:translateY(0);opacity:0.4;} 30%{transform:translateY(-6px);opacity:1;} }
+    .lw-wa-typing-bub span:nth-child(2){animation-delay:.2s;}
+    .lw-wa-typing-bub span:nth-child(3){animation-delay:.4s;}
+    @keyframes lwWaTyping { 0%,60%,100%{transform:translateY(0);opacity:.4;} 30%{transform:translateY(-5px);opacity:1;} }
 
     /* Quick replies */
-    .leon-quick-replies {
-      padding: 8px 16px 4px;
-      display: flex; flex-wrap: wrap; gap: 6px;
-      flex-shrink: 0;
+    .lw-wa-qr-bar {
+      padding:6px 12px 6px; display:flex; flex-wrap:wrap; gap:6px;
+      background:#f2f2f2; border-top:1px solid #ddd; flex-shrink:0;
     }
-    .leon-qr-btn {
-      background: transparent;
-      border: 1px solid rgba(201,168,76,0.3);
-      color: #C9A84C;
-      font-size: 0.7rem; letter-spacing: 1px;
-      padding: 5px 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: inherit;
+    .lw-wa-qr-btn {
+      background:#fff; border:1px solid #25D366; color:#075E54;
+      border-radius:18px; font-size:0.75rem; padding:5px 13px;
+      cursor:pointer; transition:all 0.2s; font-family:inherit;
     }
-    .leon-qr-btn:hover { background: rgba(201,168,76,0.12); border-color: #C9A84C; }
+    .lw-wa-qr-btn:hover { background:#25D366; color:#fff; }
 
-    /* Input area */
-    .leon-chat-input-area {
-      border-top: 1px solid rgba(201,168,76,0.15);
-      padding: 14px 16px;
-      display: flex; gap: 10px; align-items: flex-end;
-      flex-shrink: 0; background: #0E0E0F;
+    /* Input */
+    .lw-wa-input-row {
+      padding:8px 12px; display:flex; gap:8px; align-items:flex-end;
+      background:#f2f2f2; border-top:1px solid #ddd; flex-shrink:0;
     }
-    .leon-chat-input {
-      flex: 1;
-      background: #141416;
-      border: 1px solid rgba(201,168,76,0.2);
-      padding: 10px 14px;
-      color: #E8E4DC;
-      font-family: inherit; font-size: 0.875rem;
-      outline: none; resize: none;
-      line-height: 1.5; max-height: 100px;
-      transition: border-color 0.25s;
+    .lw-wa-input {
+      flex:1; background:#fff; border:none; border-radius:22px;
+      padding:10px 16px; font-family:inherit; font-size:0.875rem;
+      color:#111; outline:none; resize:none; max-height:80px; line-height:1.4;
+      box-shadow:0 1px 3px rgba(0,0,0,0.1);
     }
-    .leon-chat-input:focus { border-color: #C9A84C; }
-    .leon-chat-input::placeholder { color: #555; }
+    .lw-wa-send-btn {
+      width:44px; height:44px; border-radius:50%;
+      background:#25D366; border:none; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:background 0.2s, transform 0.2s; flex-shrink:0;
+    }
+    .lw-wa-send-btn:hover { background:#128C7E; transform:scale(1.08); }
+    .lw-wa-send-btn svg { width:20px; height:20px; fill:#fff; }
 
-    .leon-send-btn {
-      width: 42px; height: 42px;
-      background: linear-gradient(135deg, #C9A84C, #E8CB7A);
-      border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: transform 0.2s, box-shadow 0.2s;
-      flex-shrink: 0;
+    /* Footer link */
+    .lw-wa-footer {
+      text-align:center; padding:7px 12px;
+      background:#f2f2f2; border-top:1px solid #e0e0e0; flex-shrink:0;
     }
-    .leon-send-btn:hover { transform: scale(1.08); box-shadow: 0 4px 16px rgba(201,168,76,0.4); }
-    .leon-send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-    .leon-send-btn svg { width: 18px; height: 18px; fill: #080808; }
-
-    /* Powered by */
-    .leon-powered {
-      text-align: center;
-      font-size: 0.65rem; letter-spacing: 1px; color: #333;
-      padding: 6px; border-top: 1px solid rgba(255,255,255,0.03);
-      flex-shrink: 0;
+    .lw-wa-footer a {
+      font-size:0.68rem; color:#128C7E; text-decoration:none;
+      display:inline-flex; align-items:center; gap:5px; letter-spacing:0.5px;
     }
-    .leon-powered span { color: #C9A84C; }
+    .lw-wa-footer a:hover { text-decoration:underline; }
 
-    /* ── Responsive ── */
-    @media (max-width: 480px) {
-      .leon-widgets { bottom: 20px; right: 16px; }
-      .leon-chat-window { right: 0; bottom: 90px; width: 100vw; max-height: 70vh; border-left: none; border-right: none; }
+    /* ══ AI PANEL ══ */
+    .lw-ai-panel { background:#0E0E0F; border:1px solid rgba(201,168,76,0.25); }
+
+    .lw-ai-hd {
+      background:linear-gradient(135deg,#141416,#1A1A1D);
+      border-bottom:1px solid rgba(201,168,76,0.2);
+      padding:16px 20px; display:flex; align-items:center; gap:14px; flex-shrink:0;
+    }
+    .lw-ai-av {
+      width:42px; height:42px; border-radius:50%;
+      background:linear-gradient(135deg,#C9A84C,#E8CB7A);
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.85rem; font-weight:700; color:#080808;
+      font-family:'Bebas Neue',sans-serif; letter-spacing:1px; flex-shrink:0;
+    }
+    .lw-ai-hd-info { flex:1; }
+    .lw-ai-hd-name { font-size:0.9rem; font-weight:600; color:#E8E4DC; letter-spacing:1px; }
+    .lw-ai-hd-sub { display:flex; align-items:center; gap:6px; font-size:0.7rem; color:#888880; margin-top:2px; }
+    .lw-sdot { width:6px; height:6px; background:#25D366; border-radius:50%; animation:lwBlink 2s infinite; }
+    @keyframes lwBlink { 0%,100%{opacity:1;} 50%{opacity:.4;} }
+    .lw-close { background:none; border:none; cursor:pointer; color:#888880; font-size:1rem; transition:color 0.2s; padding:4px; }
+    .lw-close:hover { color:#C9A84C; }
+
+    .lw-ai-msgs {
+      flex:1; overflow-y:auto; padding:16px 14px;
+      display:flex; flex-direction:column; gap:10px;
+      scrollbar-width:thin; scrollbar-color:rgba(201,168,76,.15) transparent;
+    }
+    .lw-ai-msgs::-webkit-scrollbar { width:3px; }
+    .lw-ai-msgs::-webkit-scrollbar-thumb { background:rgba(201,168,76,.15); }
+
+    .lw-ai-msg { display:flex; gap:8px; align-items:flex-end; animation:lwMsgIn 0.28s ease; }
+    .lw-ai-msg.user { flex-direction:row-reverse; }
+    .lw-ai-msg-av {
+      width:26px; height:26px; border-radius:50%; flex-shrink:0;
+      background:linear-gradient(135deg,#C9A84C,#E8CB7A);
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.6rem; color:#080808; font-weight:700;
+    }
+    .lw-ai-msg.user .lw-ai-msg-av { background:#1A1A1D; border:1px solid rgba(201,168,76,.3); color:#C9A84C; }
+    .lw-ai-bubble {
+      max-width:82%; padding:10px 14px;
+      font-size:0.875rem; line-height:1.6; color:#E8E4DC;
+    }
+    .lw-ai-msg.ai .lw-ai-bubble { background:#141416; border:1px solid rgba(201,168,76,.15); border-bottom-left-radius:0; }
+    .lw-ai-msg.user .lw-ai-bubble { background:rgba(201,168,76,.15); border:1px solid rgba(201,168,76,.3); border-bottom-right-radius:0; text-align:right; }
+    .lw-ai-time { font-size:0.62rem; color:#333; margin-top:3px; }
+
+    .lw-ai-typing { display:flex; gap:8px; align-items:flex-end; }
+    .lw-ai-typing-dots { background:#141416; border:1px solid rgba(201,168,76,.15); padding:10px 14px; display:flex; gap:5px; }
+    .lw-ai-typing-dots span { width:6px; height:6px; background:#C9A84C; border-radius:50%; animation:lwAiTyping 1.4s infinite; }
+    .lw-ai-typing-dots span:nth-child(2){animation-delay:.2s;} .lw-ai-typing-dots span:nth-child(3){animation-delay:.4s;}
+    @keyframes lwAiTyping { 0%,60%,100%{transform:translateY(0);opacity:.4;} 30%{transform:translateY(-5px);opacity:1;} }
+
+    .lw-ai-qr-bar { padding:6px 14px 2px; display:flex; flex-wrap:wrap; gap:6px; flex-shrink:0; }
+    .lw-ai-qr-btn {
+      background:transparent; border:1px solid rgba(201,168,76,.3); color:#C9A84C;
+      font-size:0.7rem; letter-spacing:1px; padding:5px 12px;
+      cursor:pointer; transition:all 0.2s; font-family:inherit;
+    }
+    .lw-ai-qr-btn:hover { background:rgba(201,168,76,.12); border-color:#C9A84C; }
+
+    .lw-ai-input-row {
+      border-top:1px solid rgba(201,168,76,.15);
+      padding:12px 14px; display:flex; gap:8px; align-items:flex-end;
+      flex-shrink:0; background:#0E0E0F;
+    }
+    .lw-ai-input {
+      flex:1; background:#141416; border:1px solid rgba(201,168,76,.2);
+      padding:10px 14px; color:#E8E4DC; font-family:inherit; font-size:0.875rem;
+      outline:none; resize:none; max-height:80px; line-height:1.5;
+      transition:border-color 0.25s;
+    }
+    .lw-ai-input:focus { border-color:#C9A84C; }
+    .lw-ai-input::placeholder { color:#444; }
+    .lw-ai-send-btn {
+      width:42px; height:42px; background:linear-gradient(135deg,#C9A84C,#E8CB7A);
+      border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:transform 0.2s, box-shadow 0.2s; flex-shrink:0;
+    }
+    .lw-ai-send-btn:hover { transform:scale(1.08); box-shadow:0 4px 16px rgba(201,168,76,.4); }
+    .lw-ai-send-btn:disabled { opacity:.4; cursor:not-allowed; transform:none; }
+    .lw-ai-send-btn svg { width:18px; height:18px; fill:#080808; }
+
+    .lw-powered {
+      text-align:center; font-size:0.62rem; letter-spacing:1px; color:#282828;
+      padding:5px; border-top:1px solid rgba(255,255,255,.03); flex-shrink:0;
+    }
+    .lw-powered span { color:#C9A84C; }
+
+    @media(max-width:480px){
+      .lw-wrap { bottom:16px; right:14px; gap:10px; }
+      .lw-panel { right:0; bottom:90px; width:100vw; max-height:72vh; }
     }
   `;
-  document.head.appendChild(style);
+  document.head.appendChild(css);
 
-  // ── BUILD HTML ──────────────────────────────────────────────
-  const container = document.createElement('div');
-  container.className = 'leon-widgets';
-  container.innerHTML = `
-    <!-- WhatsApp -->
-    <a class="leon-wa-btn"
-       href="https://wa.me/${CONFIG.whatsapp.phone}?text=${encodeURIComponent(CONFIG.whatsapp.message)}"
-       target="_blank" rel="noopener noreferrer"
-       aria-label="Chat on WhatsApp">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-      </svg>
-      <div class="leon-wa-tooltip">${CONFIG.whatsapp.tooltip}</div>
-    </a>
-
-    <!-- AI Chat Button -->
-    <button class="leon-ai-btn" id="leon-ai-toggle" aria-label="Open AI Assistant">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="rgba(8,8,8,0.3)"/>
+  // ── FABs HTML ────────────────────────────────────────────
+  const wrap = document.createElement('div');
+  wrap.className = 'lw-wrap';
+  wrap.innerHTML = `
+    <button class="lw-fab lw-wa-fab" id="lwWaToggle" aria-label="Chat on WhatsApp">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <div class="lw-fab-tip">Chat with us</div>
+    </button>
+    <button class="lw-fab lw-ai-fab" id="lwAiToggle" aria-label="LEON AI Assistant">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.06L2 22l4.94-1.38A9.958 9.958 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z" stroke="#080808" stroke-width="1.5"/>
         <path d="M8 10h8M8 13h5" stroke="#080808" stroke-width="1.8" stroke-linecap="round"/>
-        <circle cx="17" cy="7" r="3" fill="#080808" opacity="0.6"/>
-        <path d="M15.5 7h3M17 5.5v3" stroke="#C9A84C" stroke-width="1.2" stroke-linecap="round"/>
-        <path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.06L2 22l4.94-1.38A9.958 9.958 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z" stroke="#080808" stroke-width="1.5" fill="none"/>
+        <circle cx="17" cy="7" r="2.5" fill="#080808" opacity="0.5"/>
+        <path d="M15.8 7h2.4M17 5.8v2.4" stroke="#C9A84C" stroke-width="1.2" stroke-linecap="round"/>
       </svg>
-      <div class="leon-ai-dot" id="leon-ai-dot"></div>
-      <div class="leon-ai-tooltip">Ask LEON AI</div>
+      <div class="lw-notif" id="lwAiDot"></div>
+      <div class="lw-fab-tip">Ask LEON AI</div>
     </button>
   `;
-  document.body.appendChild(container);
+  document.body.appendChild(wrap);
 
-  // ── BUILD CHAT WINDOW ───────────────────────────────────────
-  const chatWindow = document.createElement('div');
-  chatWindow.className = 'leon-chat-window';
-  chatWindow.id = 'leon-chat-window';
-  chatWindow.innerHTML = `
-    <div class="leon-chat-header">
-      <div class="leon-chat-avatar">L</div>
-      <div class="leon-chat-header-info">
-        <div class="leon-chat-header-name">${CONFIG.ai.name}</div>
-        <div class="leon-chat-header-status">
-          <div class="leon-status-dot"></div>
-          <span>${CONFIG.ai.subtitle}</span>
-        </div>
+  // ── WhatsApp Panel HTML ──────────────────────────────────
+  const online = isOnline();
+  const waEl = document.createElement('div');
+  waEl.className = 'lw-panel lw-wa-panel'; waEl.id = 'lwWaPanel';
+  waEl.innerHTML = `
+    <div class="lw-wa-hd">
+      <div class="lw-wa-av-wrap">
+        <div class="lw-wa-av">${CONFIG.whatsapp.agentAvatar}</div>
+        <div class="lw-wa-status-dot ${online ? '' : 'away'}"></div>
       </div>
-      <button class="leon-chat-close" id="leon-chat-close" aria-label="Close chat">✕</button>
+      <div class="lw-wa-hd-info">
+        <div class="lw-wa-hd-name">${CONFIG.whatsapp.agentName}</div>
+        <div class="lw-wa-hd-sub">${online ? '🟢 Online · Replies instantly' : '🟡 Away · Replies within hours'}</div>
+      </div>
+      <div class="lw-wa-hd-btns">
+        <a href="https://wa.me/${CONFIG.whatsapp.phone}" target="_blank" rel="noopener" title="Open in WhatsApp app">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42L17.59 5H14V3zm-1 2H5a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-8h-2v8H5V7h8V5z"/></svg>
+        </a>
+        <button class="lw-wa-hd-btn" id="lwWaClose" title="Close">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </div>
     </div>
 
-    <div class="leon-chat-messages" id="leon-chat-messages"></div>
-
-    <div class="leon-quick-replies" id="leon-quick-replies">
-      <button class="leon-qr-btn" data-q="What services do you offer?">Services</button>
-      <button class="leon-qr-btn" data-q="What are your prices?">Pricing</button>
-      <button class="leon-qr-btn" data-q="How long does a project take?">Timeline</button>
-      <button class="leon-qr-btn" data-q="How do I start a project with LEON?">Get Started</button>
+    <div class="lw-wa-body" id="lwWaBody">
+      <div class="lw-wa-date"><span>TODAY</span></div>
     </div>
 
-    <div class="leon-chat-input-area">
-      <textarea class="leon-chat-input" id="leon-chat-input"
-        placeholder="Ask me anything about LEON..." rows="1"
-        aria-label="Chat input"></textarea>
-      <button class="leon-send-btn" id="leon-send-btn" aria-label="Send message">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-        </svg>
+    <div class="lw-wa-qr-bar" id="lwWaQr">
+      ${CONFIG.whatsapp.quickReplies.map(q =>
+        `<button class="lw-wa-qr-btn" data-text="${q.text}">${q.label}</button>`
+      ).join('')}
+    </div>
+
+    <div class="lw-wa-input-row">
+      <textarea class="lw-wa-input" id="lwWaInput" placeholder="Type a message..." rows="1"></textarea>
+      <button class="lw-wa-send-btn" id="lwWaSend">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
     </div>
 
-    <div class="leon-powered">Powered by <span>LEON AI ✦ Claude</span></div>
+    <div class="lw-wa-footer">
+      <a href="https://wa.me/${CONFIG.whatsapp.phone}" target="_blank" rel="noopener">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="#128C7E"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Continue in WhatsApp app
+      </a>
+    </div>
   `;
-  document.body.appendChild(chatWindow);
+  document.body.appendChild(waEl);
 
-  // ── STATE ───────────────────────────────────────────────────
-  let isOpen = false;
-  let isLoading = false;
-  const conversationHistory = [];
-
-  // ── HELPERS ─────────────────────────────────────────────────
-  function getTime() {
-    return new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-  }
-
-  function scrollToBottom() {
-    const msgs = document.getElementById('leon-chat-messages');
-    setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; }, 50);
-  }
-
-  function appendMessage(role, text) {
-    const msgs = document.getElementById('leon-chat-messages');
-    const div = document.createElement('div');
-    div.className = `leon-msg ${role}`;
-    const initial = role === 'ai' ? 'L' : '✦';
-    div.innerHTML = `
-      <div class="leon-msg-avatar">${initial}</div>
-      <div>
-        <div class="leon-msg-bubble">${text.replace(/\n/g, '<br>')}</div>
-        <div class="leon-msg-time">${getTime()}</div>
+  // ── AI Panel HTML ────────────────────────────────────────
+  const aiEl = document.createElement('div');
+  aiEl.className = 'lw-panel lw-ai-panel'; aiEl.id = 'lwAiPanel';
+  aiEl.innerHTML = `
+    <div class="lw-ai-hd">
+      <div class="lw-ai-av">L</div>
+      <div class="lw-ai-hd-info">
+        <div class="lw-ai-hd-name">${CONFIG.ai.name}</div>
+        <div class="lw-ai-hd-sub"><div class="lw-sdot"></div><span>${CONFIG.ai.subtitle}</span></div>
       </div>
-    `;
-    msgs.appendChild(div);
-    scrollToBottom();
-  }
+      <button class="lw-close" id="lwAiClose">✕</button>
+    </div>
+    <div class="lw-ai-msgs" id="lwAiMsgs"></div>
+    <div class="lw-ai-qr-bar" id="lwAiQr">
+      <button class="lw-ai-qr-btn" data-q="What services do you offer?">Services</button>
+      <button class="lw-ai-qr-btn" data-q="What are your prices?">Pricing</button>
+      <button class="lw-ai-qr-btn" data-q="How long does a project take?">Timeline</button>
+      <button class="lw-ai-qr-btn" data-q="How do I get started?">Get Started</button>
+    </div>
+    <div class="lw-ai-input-row">
+      <textarea class="lw-ai-input" id="lwAiInput" placeholder="Ask me anything..." rows="1"></textarea>
+      <button class="lw-ai-send-btn" id="lwAiSend">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+    <div class="lw-powered">Powered by <span>LEON AI ✦ Claude</span></div>
+  `;
+  document.body.appendChild(aiEl);
 
-  function showTyping() {
-    const msgs = document.getElementById('leon-chat-messages');
+  // ── Helpers ──────────────────────────────────────────────
+  const $ = id => document.getElementById(id);
+  const getTime = () => new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  const scrollWa = () => { const b=$('lwWaBody'); setTimeout(()=>{ b.scrollTop=b.scrollHeight; },40); };
+  const scrollAi = () => { const m=$('lwAiMsgs'); setTimeout(()=>{ m.scrollTop=m.scrollHeight; },40); };
+
+  // ── WA message ──────────────────────────────────────────
+  function waMsg(text, dir) {
+    const body = $('lwWaBody');
     const div = document.createElement('div');
-    div.className = 'leon-typing'; div.id = 'leon-typing';
+    div.className = `lw-wa-msg ${dir==='out'?'out':''}`;
     div.innerHTML = `
-      <div class="leon-msg-avatar">L</div>
-      <div class="leon-typing-dots">
-        <span></span><span></span><span></span>
+      <div class="lw-wa-bubble ${dir==='out'?'out':'in'}">
+        <pre>${text}</pre>
+        <div class="lw-wa-meta">
+          <span class="lw-wa-time">${getTime()}</span>
+          ${dir==='out'?'<span class="lw-wa-tick">✓✓</span>':''}
+        </div>
       </div>`;
-    msgs.appendChild(div);
-    scrollToBottom();
+    body.appendChild(div);
+    scrollWa();
   }
 
-  function removeTyping() {
-    const t = document.getElementById('leon-typing');
-    if (t) t.remove();
+  function waTypingShow() {
+    const body = $('lwWaBody');
+    const d = document.createElement('div');
+    d.className='lw-wa-typing'; d.id='lwWaTyping';
+    d.innerHTML=`<div class="lw-wa-typing-bub"><span></span><span></span><span></span></div>`;
+    body.appendChild(d); scrollWa();
   }
+  function waTypingHide() { const t=$('lwWaTyping'); if(t) t.remove(); }
 
-  function hideQuickReplies() {
-    const qr = document.getElementById('leon-quick-replies');
-    if (qr) qr.style.display = 'none';
-  }
+  // ── State ────────────────────────────────────────────────
+  let waOpen=false, aiOpen=false, aiLoading=false;
+  let waGreeted=false, aiGreeted=false;
+  const aiHistory=[];
 
-  // ── OPEN / CLOSE ────────────────────────────────────────────
-  function openChat() {
-    isOpen = true;
-    chatWindow.classList.add('open');
-    const dot = document.getElementById('leon-ai-dot');
-    if (dot) dot.style.display = 'none';
-    // Show greeting if first open
-    if (conversationHistory.length === 0) {
-      setTimeout(() => {
-        showTyping();
-        setTimeout(() => {
-          removeTyping();
-          appendMessage('ai', CONFIG.ai.greeting);
-        }, 1200);
-      }, 300);
+  // ── WA open/close ────────────────────────────────────────
+  function openWa() {
+    waOpen=true;
+    if(aiOpen) closeAi();
+    waEl.classList.add('open');
+    if(!waGreeted) {
+      waGreeted=true;
+      waTypingShow();
+      setTimeout(()=>{ waTypingHide(); waMsg(online?CONFIG.whatsapp.greeting:CONFIG.whatsapp.awayMessage,'in'); },900);
     }
-    setTimeout(() => document.getElementById('leon-chat-input')?.focus(), 400);
+    setTimeout(()=>$('lwWaInput')?.focus(),400);
+  }
+  function closeWa() { waOpen=false; waEl.classList.remove('open'); }
+
+  // ── WA send: show on-site + open WA with message ────────
+  function waSend(text) {
+    if(!text.trim()) return;
+    const inp=$('lwWaInput');
+    if(inp){inp.value='';inp.style.height='auto';}
+    $('lwWaQr').style.display='none';
+    waMsg(text,'out');
+    waTypingShow();
+    setTimeout(()=>{
+      waTypingHide();
+      const reply = online
+        ? `Got it! 🙌 We'll reply to you on WhatsApp right away.\n\nYou can also continue this conversation directly in the app by tapping the link below.`
+        : `Message received! 📩 We're currently offline but will reply on WhatsApp as soon as we're back.\n\n📱 +254 719 628 766`;
+      waMsg(reply,'in');
+      // Silently send to WhatsApp — opens in background tab
+      const url=`https://wa.me/${CONFIG.whatsapp.phone}?text=${encodeURIComponent(text)}`;
+      const link=document.createElement('a');
+      link.href=url; link.target='_blank'; link.rel='noopener noreferrer';
+      document.body.appendChild(link); link.click(); link.remove();
+    },1400);
   }
 
-  function closeChat() {
-    isOpen = false;
-    chatWindow.classList.remove('open');
+  // ── AI open/close ────────────────────────────────────────
+  function openAi() {
+    aiOpen=true;
+    if(waOpen) closeWa();
+    aiEl.classList.add('open');
+    $('lwAiDot').style.display='none';
+    if(!aiGreeted){
+      aiGreeted=true;
+      aiTypingShow();
+      setTimeout(()=>{ aiTypingHide(); aiMsg('ai',CONFIG.ai.greeting); },1000);
+    }
+    setTimeout(()=>$('lwAiInput')?.focus(),400);
   }
+  function closeAi() { aiOpen=false; aiEl.classList.remove('open'); }
 
-  // ── SEND MESSAGE ─────────────────────────────────────────────
-  async function sendMessage(text) {
-    if (!text.trim() || isLoading) return;
-    isLoading = true;
-    hideQuickReplies();
+  // ── AI messages ──────────────────────────────────────────
+  function aiMsg(role,text){
+    const msgs=$('lwAiMsgs');
+    const div=document.createElement('div');
+    div.className=`lw-ai-msg ${role}`;
+    div.innerHTML=`
+      <div class="lw-ai-msg-av">${role==='ai'?'L':'✦'}</div>
+      <div>
+        <div class="lw-ai-bubble">${text.replace(/\n/g,'<br>')}</div>
+        <div class="lw-ai-time">${getTime()}</div>
+      </div>`;
+    msgs.appendChild(div); scrollAi();
+  }
+  function aiTypingShow(){
+    const msgs=$('lwAiMsgs');
+    const d=document.createElement('div');
+    d.className='lw-ai-typing'; d.id='lwAiTyping';
+    d.innerHTML=`<div class="lw-ai-msg-av">L</div><div class="lw-ai-typing-dots"><span></span><span></span><span></span></div>`;
+    msgs.appendChild(d); scrollAi();
+  }
+  function aiTypingHide(){ const t=$('lwAiTyping'); if(t)t.remove(); }
 
-    const input = document.getElementById('leon-chat-input');
-    const sendBtn = document.getElementById('leon-send-btn');
-    if (input) input.value = '';
-    if (sendBtn) sendBtn.disabled = true;
-
-    appendMessage('user', text);
-    conversationHistory.push({ role: 'user', content: text });
-
-    showTyping();
-
+  async function aiSend(text){
+    if(!text.trim()||aiLoading) return;
+    aiLoading=true;
+    const inp=$('lwAiInput'), btn=$('lwAiSend');
+    if(inp){inp.value='';inp.style.height='auto';}
+    if(btn) btn.disabled=true;
+    $('lwAiQr').style.display='none';
+    aiMsg('user',text);
+    aiHistory.push({role:'user',content:text});
+    aiTypingShow();
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 400,
-          system: CONFIG.ai.systemPrompt,
-          messages: conversationHistory
-        })
+      const r=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:350,system:CONFIG.ai.systemPrompt,messages:aiHistory})
       });
-
-      const data = await response.json();
-      const reply = data.content?.[0]?.text || "I'm having trouble connecting right now. Please contact us directly at leonkuyia@gmail.com or WhatsApp +254 719 628 766.";
-
-      removeTyping();
-      conversationHistory.push({ role: 'assistant', content: reply });
-      appendMessage('ai', reply);
-    } catch (err) {
-      removeTyping();
-      appendMessage('ai', "I'm offline at the moment. Please reach LEON directly:\n📧 leonkuyia@gmail.com\n📱 +254 719 628 766");
+      const d=await r.json();
+      const reply=d.content?.[0]?.text||"I'm having a connection issue. Please contact LEON:\n📧 leonkuyia@gmail.com\n📱 +254 719 628 766";
+      aiTypingHide(); aiHistory.push({role:'assistant',content:reply}); aiMsg('ai',reply);
+    } catch {
+      aiTypingHide(); aiMsg('ai',"I'm offline right now.\n📧 leonkuyia@gmail.com\n📱 +254 719 628 766");
     }
-
-    isLoading = false;
-    if (sendBtn) sendBtn.disabled = false;
-    if (input) { input.focus(); input.style.height = 'auto'; }
+    aiLoading=false;
+    if(btn) btn.disabled=false;
+    if(inp) inp.focus();
   }
 
-  // ── EVENT LISTENERS ──────────────────────────────────────────
-  document.getElementById('leon-ai-toggle').addEventListener('click', () => {
-    isOpen ? closeChat() : openChat();
+  // ── Events ───────────────────────────────────────────────
+  $('lwWaToggle').addEventListener('click',()=>waOpen?closeWa():openWa());
+  $('lwAiToggle').addEventListener('click',()=>aiOpen?closeAi():openAi());
+  $('lwWaClose').addEventListener('click',closeWa);
+  $('lwAiClose').addEventListener('click',closeAi);
+
+  $('lwWaSend').addEventListener('click',()=>waSend($('lwWaInput').value.trim()));
+  $('lwWaInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();waSend(e.target.value.trim());}});
+  $('lwWaInput').addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px';});
+  $('lwWaQr').addEventListener('click',e=>{if(e.target.classList.contains('lw-wa-qr-btn')) waSend(e.target.dataset.text);});
+
+  $('lwAiSend').addEventListener('click',()=>aiSend($('lwAiInput').value.trim()));
+  $('lwAiInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();aiSend(e.target.value.trim());}});
+  $('lwAiInput').addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px';});
+  $('lwAiQr').addEventListener('click',e=>{if(e.target.classList.contains('lw-ai-qr-btn')) aiSend(e.target.dataset.q);});
+
+  document.addEventListener('click',e=>{
+    if(waOpen&&!waEl.contains(e.target)&&!$('lwWaToggle').contains(e.target)) closeWa();
+    if(aiOpen&&!aiEl.contains(e.target)&&!$('lwAiToggle').contains(e.target)) closeAi();
   });
 
-  document.getElementById('leon-chat-close').addEventListener('click', closeChat);
-
-  document.getElementById('leon-send-btn').addEventListener('click', () => {
-    const input = document.getElementById('leon-chat-input');
-    sendMessage(input.value.trim());
-  });
-
-  document.getElementById('leon-chat-input').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage(e.target.value.trim());
-    }
-  });
-
-  // Auto-resize textarea
-  document.getElementById('leon-chat-input').addEventListener('input', function () {
-    this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-  });
-
-  // Quick reply buttons
-  document.getElementById('leon-quick-replies').addEventListener('click', (e) => {
-    if (e.target.classList.contains('leon-qr-btn')) {
-      sendMessage(e.target.dataset.q);
-    }
-  });
-
-  // Close on outside click
-  document.addEventListener('click', (e) => {
-    if (isOpen &&
-        !chatWindow.contains(e.target) &&
-        !document.getElementById('leon-ai-toggle').contains(e.target)) {
-      closeChat();
-    }
-  });
-
-  // Entrance animation — stagger buttons in
-  container.style.opacity = '0';
-  setTimeout(() => {
-    container.style.transition = 'opacity 0.5s ease';
-    container.style.opacity = '1';
-  }, 800);
+  // Entrance fade
+  wrap.style.opacity='0';
+  setTimeout(()=>{wrap.style.transition='opacity 0.5s ease';wrap.style.opacity='1';},700);
 
 })();
