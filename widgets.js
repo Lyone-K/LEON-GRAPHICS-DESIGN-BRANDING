@@ -11,7 +11,7 @@
   const CONFIG = {
     whatsapp: {
       phone: '254719628766',
-      agentName: 'Leon NKuyia',
+      agentName: 'Leon Kuyia',
       agentRole: 'Creative Director · LEON Graphics',
       agentAvatar: 'LK',
       onlineHours: { start: 0, end: 24 }, // ← Always online (change to e.g. {start:8, end:18} for business hours only)
@@ -68,7 +68,7 @@ Be concise, warm, and professional. Reflect LEON's brand: creative, confident, s
     }
     .lw-fab:hover { transform:scale(1.1) translateY(-3px); }
     .lw-fab-tip {
-      position:absolute; right:70px; top:50%; transform:translateY(-50%);
+      position:absolute; right:56px; top:50%; transform:translateY(-50%);
       background:rgba(8,8,8,0.93); color:#E8E4DC;
       font-size:0.72rem; letter-spacing:1px; padding:6px 14px;
       white-space:nowrap; pointer-events:none; opacity:0;
@@ -79,9 +79,9 @@ Be concise, warm, and professional. Reflect LEON's brand: creative, confident, s
     /* WA FAB */
     .lw-wa-fab { background:#25D366; box-shadow:0 4px 20px rgba(37,211,102,0.45); }
     .lw-wa-fab:hover { box-shadow:0 8px 32px rgba(37,211,102,0.6); }
-    .lw-wa-fab svg { width:28px; height:28px; fill:#fff; }
+    .lw-wa-fab svg { width:22px; height:22px; fill:#fff; }
     .lw-wa-fab::before {
-      content:''; position:absolute; inset:-8px; border-radius:50%;
+      content:''; position:absolute; inset:-6px; border-radius:50%;
       border:2px solid rgba(37,211,102,0.35);
       animation:lwWaPulse 2.5s ease-in-out infinite;
     }
@@ -90,10 +90,10 @@ Be concise, warm, and professional. Reflect LEON's brand: creative, confident, s
     /* AI FAB */
     .lw-ai-fab { background:linear-gradient(135deg,#C9A84C,#E8CB7A); box-shadow:0 4px 20px rgba(201,168,76,0.45); }
     .lw-ai-fab:hover { box-shadow:0 8px 32px rgba(201,168,76,0.6); }
-    .lw-ai-fab svg { width:26px; height:26px; }
+    .lw-ai-fab svg { width:20px; height:20px; }
     .lw-notif {
-      position:absolute; top:4px; right:4px;
-      width:10px; height:10px; background:#ff4757;
+      position:absolute; top:2px; right:2px;
+      width:8px; height:8px; background:#ff4757;
       border-radius:50%; border:2px solid #080808;
       animation:lwNotif 0.4s ease 1.2s both;
     }
@@ -556,10 +556,10 @@ Be concise, warm, and professional. Reflect LEON's brand: creative, confident, s
     aiHistory.push({role:'user',content:text});
     aiTypingShow();
     try {
-      const r=await fetch('https://api.anthropic.com/v1/messages',{
+      const r=await fetch('/api/chat',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:350,system:CONFIG.ai.systemPrompt,messages:aiHistory})
+        body:JSON.stringify({system:CONFIG.ai.systemPrompt,messages:aiHistory})
       });
       const d=await r.json();
       const reply=d.content?.[0]?.text||"I'm having a connection issue. Please contact LEON:\n📧 leonkuyia@gmail.com\n📱 +254 719 628 766";
