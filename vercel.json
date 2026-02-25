@@ -15,8 +15,8 @@
       "dest": "/logo.png"
     },
     {
-      "src": "/logonn.png",
-      "dest": "/logonn.png"
+      "src": "/logo.png",
+      "dest": "/logo.png"
     },
     {
       "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|webp))",
