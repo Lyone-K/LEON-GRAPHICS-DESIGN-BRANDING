@@ -19,7 +19,7 @@
       awayMessage: "Hey! We're currently offline but we'll get back to you as soon as possible — usually within a few hours.\n\nLeave your message below and we'll reply on WhatsApp! 📲",
       quickReplies: [
         { label: '🎨 Graphic Design', text: "Hi! I'm interested in graphic design services." },
-        { label: '💻 Web Design/Dev',     text: "Hi! I need a website designed or developed." },
+        { label: '💻 Web Design',     text: "Hi! I need a website designed or developed." },
         { label: '🚀 Branding',       text: "Hi! I'd like help with branding and identity." },
         { label: '💰 Get a Quote',    text: "Hi! I'd like to get a quote for a project." },
       ]
