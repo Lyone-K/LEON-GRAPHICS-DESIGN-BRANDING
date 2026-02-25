@@ -7,18 +7,3 @@
     }
   }
 }
-```
-
-Commit → Vercel auto-redeploys → done.
-
-This works because:
-- **`cleanUrls`** handles removing `.html` from all pages automatically
-- **`functions`** registers your API without conflicting with static file serving
-- No `builds` or `routes` needed — Vercel handles everything else automatically
-
-After redeployment test these URLs:
-```
-https://leon-graphics-design-branding.vercel.app/
-https://leon-graphics-design-branding.vercel.app/about
-https://leon-graphics-design-branding.vercel.app/services
-https://leon-graphics-design-branding.vercel.app/api/chat
