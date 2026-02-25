@@ -11,7 +11,7 @@
   const CONFIG = {
     whatsapp: {
       phone: '254719628766',
-      agentName: 'Leon Kuyia',
+      agentName: 'Leon NKuyia',
       agentRole: 'Creative Director · LEON Graphics',
       agentAvatar: 'LK',
       onlineHours: { start: 0, end: 24 }, // ← Always online (change to e.g. {start:8, end:18} for business hours only)
@@ -39,7 +39,7 @@ SERVICES & PRICING:
 PROCESS: Discovery → Strategy → Design → Delivery
 TIMELINE: Logo 3–7 days | Website 2–4 weeks | Full branding 3–6 weeks
 CONTACT: +254 719 628 766 | leonkuyia@gmail.com | Nairobi, Kenya
-HOURS: Mon–Fri, 8:00 AM – 6:00 PM EAT
+HOURS: Mon–Fri, 9:00 AM – 5:30 PM EAT
 
 Be concise, warm, and professional. Reflect LEON's brand: creative, confident, sophisticated. If you cannot answer, direct them to contact LEON directly.`
     }
@@ -437,7 +437,7 @@ Be concise, warm, and professional. Reflect LEON's brand: creative, confident, s
 
   // ── Helpers ──────────────────────────────────────────────
   const $ = id => document.getElementById(id);
-  const getTime = () => new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  const getTime = () => new Date().toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Africa/Nairobi'});
   const scrollWa = () => { const b=$('lwWaBody'); setTimeout(()=>{ b.scrollTop=b.scrollHeight; },40); };
   const scrollAi = () => { const m=$('lwAiMsgs'); setTimeout(()=>{ m.scrollTop=m.scrollHeight; },40); };
 
