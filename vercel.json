@@ -5,5 +5,11 @@
     "api/chat.js": {
       "runtime": "nodejs18.x"
     }
-  }
+  },
+  "rewrites": [
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/services", "destination": "/services.html" },
+    { "source": "/portfolio", "destination": "/portfolio.html" },
+    { "source": "/contact", "destination": "/contact.html" }
+  ]
 }
