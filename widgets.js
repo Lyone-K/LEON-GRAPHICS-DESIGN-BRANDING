@@ -225,7 +225,7 @@ Be concise, warm, and professional. Reflect LEON's brand: creative, confident, s
     .lw-ai-msgs::-webkit-scrollbar-thumb { background:rgba(201,168,76,.15); }
     .lw-ai-msg { display:flex; gap:8px; align-items:flex-end; animation:lwMsgIn 0.28s ease; }
     .lw-ai-msg.user { flex-direction:row-reverse; }
-    .lw-ai-msg-av { width:26px; height:26px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,#C9A84C,#E8CB7A); display:flex; align-items:center; justify-content:center; font-size:0.6rem; color:#080808; font-weight:700; }
+    .lw-ai-msg-av { width: 20px; height: 20px; border-radius: 50%; background: url('logo.png') center/cover no-repeat; }
     .lw-ai-msg.user .lw-ai-msg-av { background:#1A1A1D; border:1px solid rgba(201,168,76,.3); color:#C9A84C; }
     .lw-ai-bubble { max-width:82%; padding:10px 14px; font-size:0.875rem; line-height:1.6; color:#E8E4DC; }
     .lw-ai-msg.ai .lw-ai-bubble { background:#141416; border:1px solid rgba(201,168,76,.15); border-bottom-left-radius:0; }
@@ -327,7 +327,7 @@ Be concise, warm, and professional. Reflect LEON's brand: creative, confident, s
   aiEl.className = 'lw-panel lw-ai-panel'; aiEl.id = 'lwAiPanel';
   aiEl.innerHTML = `
     <div class="lw-ai-hd">
-      <div class="lw-ai-av">L</div>
+      <div class="lw-ai-av"></div>
       <div class="lw-ai-hd-info">
         <div class="lw-ai-hd-name">${CONFIG.ai.name}</div>
         <div class="lw-ai-hd-sub"><div class="lw-sdot"></div><span>${CONFIG.ai.subtitle}</span></div>
