@@ -52,9 +52,9 @@
 
     .portfolio-grid {
       display:grid;
-      grid-template-columns:repeat(12, 1fr);
+      grid-template-columns:repeat(3, 1fr);
       grid-auto-rows:80px;
-      gap:4px;
+      gap:6px;
     }
 
     /* ─── Portfolio Item ─── */
@@ -64,16 +64,10 @@
       background: var(--surface);
       border: 1px solid var(--gold-border);
       cursor: pointer;
+      aspect-ratio: 4 / 3;
     }
 
-    /* Layout assignments */
-    .p-item:nth-child(1) { grid-column: span 7; grid-row: span 5; }
-    .p-item:nth-child(2) { grid-column: span 5; grid-row: span 3; }
-    .p-item:nth-child(3) { grid-column: span 5; grid-row: span 2; }
-    .p-item:nth-child(4) { grid-column: span 4; grid-row: span 4; }
-    .p-item:nth-child(5) { grid-column: span 4; grid-row: span 4; }
-    .p-item:nth-child(6) { grid-column: span 4; grid-row: span 4; }
-
+    
     /* ─── THE FIX: Image fills the entire card perfectly ─── */
     .p-item img.project-image {
       position: absolute;
@@ -95,7 +89,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 36px;
+      gap: 12px;
       background: var(--surface);
       transition: background 0.3s;
       z-index: 0; /* sits behind the image once loaded */
@@ -184,13 +178,8 @@
       .filter-bar, .portfolio-body { padding-left:24px; padding-right:24px; }
 
       /* Tablet grid: 2 columns, fixed heights */
-      .portfolio-grid {
-        grid-template-columns: 1fr 1fr;
-        grid-auto-rows: 220px;
-        gap: 6px;
-      }
-      .p-item:nth-child(n) { grid-column: span 1; grid-row: span 1; }
-      .p-item:nth-child(1) { grid-column: span 2; grid-row: span 1; }
+      .portfolio-grid { grid-template-columns:1fr 1fr; }
+      .p-item:nth-child(n) { grid-column:span 1; }
 
       .portfolio-cta { padding:40px 24px; }
       .footer-top { grid-template-columns:1fr; gap:40px; }
@@ -200,12 +189,8 @@
 
     @media (max-width:600px) {
       /* Mobile: single column, consistent card height */
-      .portfolio-grid {
-        grid-template-columns: 1fr;
-        grid-auto-rows: 260px;
-        gap: 6px;
-      }
-      .p-item:nth-child(n) { grid-column: span 1; grid-row: span 1; }
+      .portfolio-grid { grid-template-columns:1fr; }
+      .p-item:nth-child(n) { grid-column:span 1; }
 
       /* Make overlay always partially visible on mobile (no hover) */
       .p-overlay {
@@ -424,4 +409,5 @@
   <script src="widgets.js"></script>
 </body>
 </html>
+
 
