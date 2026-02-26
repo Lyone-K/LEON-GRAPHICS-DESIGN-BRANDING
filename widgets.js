@@ -386,7 +386,7 @@ Be concise, warm, and professional. Reflect LEON's brand: creative, confident, s
     const div=document.createElement('div');
     div.className=`lw-ai-msg ${role}`;
     div.innerHTML=`
-      <div class="lw-ai-msg-av">${role==='ai'?'L':'✦'}</div>
+      <div class="lw-ai-msg-av">${role==='ai'?'':'✦'}</div>
       <div>
         <div class="lw-ai-bubble">${text.replace(/\n/g,'<br>')}</div>
         <div class="lw-ai-time">${getTime()}</div>
