@@ -212,7 +212,7 @@ Be concise, warm, and professional. Reflect LEON's brand: creative, confident, s
     /* AI panel */
     .lw-ai-panel { background:#0E0E0F; border:1px solid rgba(201,168,76,0.25); }
     .lw-ai-hd { background:linear-gradient(135deg,#141416,#1A1A1D); border-bottom:1px solid rgba(201,168,76,0.2); padding:16px 20px; display:flex; align-items:center; gap:14px; flex-shrink:0; }
-    .lw-ai-av { width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,#C9A84C,#E8CB7A); display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:700; color:#080808; letter-spacing:1px; flex-shrink:0; }
+    .lw-ai-av { width: 40px; height: 40px; border-radius: 50%; background: url('logo.png') center/cover no-repeat; }
     .lw-ai-hd-info { flex:1; }
     .lw-ai-hd-name { font-size:0.9rem; font-weight:600; color:#E8E4DC; letter-spacing:1px; }
     .lw-ai-hd-sub { display:flex; align-items:center; gap:6px; font-size:0.7rem; color:#888880; margin-top:2px; }
