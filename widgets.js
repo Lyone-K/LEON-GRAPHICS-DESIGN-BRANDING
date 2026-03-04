@@ -52,38 +52,38 @@ Be concise, warm, and professional.`
     if (/^(hi|hello|hey|good morning|good afternoon|good evening|habari|sasa|niaje|howdy)/.test(t))
       return "Hello! 👋 Welcome to LEON Graphics Design & Branding. I'm here to help with questions about our services, pricing, or how to get started. What can I do for you today?";
     if (/what.*service|what.*offer|what.*do you do|services available/.test(t))
-      return "We offer 4 core services: Graphic Design from KES 5,000, Web Design and Development from KES 25,000, Brand Strategy from KES 15,000, and Print and Packaging from KES 3,000. Which one interests you?";
+      return "We offer 4 core services: Graphic Design from KES 1,200_, Web Design and Development from KES 20,000+, Brand Strategy from KES 15,000+, and Print and Packaging from KES 800+. Which one interests you?";
     if (/price|cost|how much|pricing|rate|charge|fee|budget|ksh|kes|afford/.test(t))
-      return "Here is our pricing guide: Graphic Design from KES 5,000, Web Design from KES 25,000, Brand Strategy from KES 15,000, and Print and Packaging from KES 3,000. For a custom quote contact us on WhatsApp at plus 254 719 628 766.";
+      return "Here is our pricing guide: Graphic Design from KES 1,200, Web Design from KES 20,000+, Brand Strategy from KES 15,000+, and Print and Packaging from KES 800+. For a custom quote contact us on WhatsApp at +254 719 628 766.";
     if (/logo/.test(t))
-      return "We design professional logos that truly capture your brand! We offer multiple unique concepts, unlimited revisions, and final files in all formats. Delivered in 3 to 7 days, starting from KES 5,000. Ready to start? Contact us on plus 254 719 628 766.";
+      return "We design professional logos that truly capture your brand! We offer multiple unique concepts, unlimited revisions, and final files in all formats. Delivered in 3 to 7 days, starting from KES 1,200+. Ready to start? Contact us on +254 719 628 766.";
     if (/web|website|site|online|develop|e-commerce|ecommerce/.test(t))
-      return "We build beautiful fast responsive websites! Mobile friendly, SEO optimized, and e-commerce ready. Delivered in 2 to 4 weeks, starting from KES 25,000. Let us discuss your project — call or WhatsApp us on plus 254 719 628 766.";
+      return "We build beautiful fast responsive websites! Mobile friendly, SEO optimized, and e-commerce ready. Delivered in 2 to 7 weeks, starting from KES 20,000+. Let us discuss your project — call or WhatsApp us on +254 719 628 766.";
     if (/brand|identity|rebrand|brand strategy/.test(t))
-      return "A strong brand is everything! Our branding package includes brand strategy, logo and visual identity, color palette, typography, and a full brand style guide. Starting from KES 15,000, timeline 3 to 6 weeks. Get in touch on plus 254 719 628 766.";
+      return "A strong brand is everything! Our branding package includes brand strategy, logo and visual identity, color palette, typography, and a full brand style guide. Starting from KES 15,000+, timeline 3 to 6 weeks. Get in touch on +254 719 628 766.";
     if (/print|card|brochure|flyer|banner|packaging|poster|sticker/.test(t))
-      return "We create amazing print materials — business cards, brochures, banners, posters, and product packaging. Starting from KES 3,000. Contact us on plus 254 719 628 766 for a custom quote.";
+      return "We create amazing print materials — business cards, brochures, banners, posters, and product packaging. Starting from KES 800+. Contact us on +254 719 628 766 for a custom quote.";
     if (/how long|timeline|time|days|weeks|fast|quick|urgent|rush/.test(t))
-      return "Our typical turnaround times are: Logo design 3 to 7 days, Website 2 to 4 weeks, Full branding 3 to 6 weeks, and Print materials 2 to 5 days. Need something urgent? We offer rush delivery — call us on plus 254 719 628 766.";
+      return "Our typical turnaround times are: Logo design 3 to 7 days, Website 2 to 7 weeks, Full branding 3 to 6 weeks, and Print materials 2 to 5 days. Need something urgent? We offer rush delivery — call us on +254 719 628 766.";
     if (/how.*work|process|how.*start|steps|procedure/.test(t))
-      return "Here is how we work together: First, Discovery — we learn about your brand and goals. Second, Strategy — we build a creative direction. Third, Design — we craft your visuals. Fourth, Delivery — final files ready to use. Ready to begin? Call us on plus 254 719 628 766.";
+      return "Here is how we work together: First, Discovery — we learn about your brand and goals. Second, Strategy — we build a creative direction. Third, Design — we craft your visuals. Fourth, Delivery — final files ready to use. Ready to begin? Call us on +254 719 628 766.";
     if (/contact|reach|phone|email|whatsapp|location|address|where|nairobi|find you/.test(t))
-      return "You can reach LEON Graphics on WhatsApp or call plus 254 719 628 766, email leonkuyia at gmail dot com, or visit us in Nairobi, Kenya. We are available Monday to Friday, 8 AM to 6 PM East Africa Time.";
+      return "You can reach LEON Graphics on WhatsApp or call +254 719 628 766, email leonkuyia at gmail dot com, or visit us in Nairobi, Kenya. We are available Monday to Friday, 9 AM to 5:30 PM East Africa Time.";
     if (/portfolio|past work|sample|example|previous work|projects/.test(t))
-      return "Our portfolio includes brand identities, e-commerce websites, product packaging, and social media campaigns. Visit our Portfolio page to see our work, or contact us on plus 254 719 628 766 to see projects in your industry.";
+      return "Our portfolio includes brand identities, e-commerce websites, product packaging, and social media campaigns. Visit our Portfolio page to see our work, or contact us on +254 719 628 766 to see projects in your industry.";
     if (/pay|payment|deposit|mpesa|m-pesa|bank|transfer|installment/.test(t))
-      return "We accept M-Pesa, Bank Transfer, and Card Payments. We require a 50 percent deposit to begin, with the balance on delivery. For payment details contact us on plus 254 719 628 766.";
+      return "We accept M-Pesa, Bank Transfer, and Card Payments. We require a 50 percent deposit to begin, 30% when 3/4 of the work is done and confirmed by the client, with the balance on delivery. For payment details contact us on +254 719 628 766.";
     if (/revis|change|edit|update|modify|not happy|amend/.test(t))
-      return "We want you to absolutely love your design! All packages include revision rounds and we refine until you are 100 percent satisfied. Contact us on plus 254 719 628 766 for specific revision terms.";
+      return "We want you to absolutely love your design! All packages include revision rounds and we refine until you are 100 percent satisfied. Contact us on +254 719 628 766 for specific revision terms.";
     if (/social media|instagram|facebook|twitter|tiktok|content/.test(t))
-      return "Yes, we create stunning social media graphics! Post designs, story covers, profile branding, content calendars, and ad creatives. Starting from KES 5,000. Contact us on plus 254 719 628 766.";
+      return "Yes, we create stunning social media graphics! Post designs, story covers, profile branding, content calendars, and ad creatives. Starting from KES 1,200+. Contact us on +254 719 628 766.";
     if (/thank|thanks|asante|appreciate|helpful/.test(t))
-      return "You are very welcome! It is our pleasure to help. If you are ready to start a project or have more questions, call us on plus 254 719 628 766 or email leonkuyia at gmail dot com. We look forward to working with you!";
+      return "You are very welcome! It is our pleasure to help. If you are ready to start a project or have more questions, call us on +254 719 628 766 or email leonkuyia at gmail dot com. We look forward to working with you!";
     if (/who are you|what are you|are you.*bot|are you.*ai|are you human/.test(t))
-      return "I am LEON AI, the virtual assistant for LEON Graphics Design and Branding! I can answer questions about our services, pricing, and process instantly. For complex enquiries our human team is available on plus 254 719 628 766.";
+      return "I am LEON AI, the virtual assistant for LEON Graphics Design and Branding! I can answer questions about our services, pricing, and process instantly. For complex enquiries our human team is available on +254 719 628 766.";
     if (/bye|goodbye|see you|later|kwaheri/.test(t))
-      return "Goodbye! It was great chatting with you. Whenever you are ready to start your project, we are here on plus 254 719 628 766. Have a wonderful day!";
-    return "Great question! For the most accurate answer I would recommend speaking directly with our team on WhatsApp plus 254 719 628 766, or email leonkuyia at gmail dot com. We are available Monday to Friday, 8 AM to 6 PM. Or tap the green WhatsApp button to chat instantly!";
+      return "Goodbye! It was great chatting with you. Whenever you are ready to start your project, we are here on +254 719 628 766. Have a wonderful day!";
+    return "Great question! For the most accurate answer I would recommend speaking directly with our team on WhatsApp +254 719 628 766, or email leonkuyia at gmail dot com. We are available Monday to Friday, 9 AM to 5:30 PM. Or tap the WhatsApp button to chat instantly!";
   }
 
   // ── CSS ───────────────────────────────────────────────────
@@ -333,7 +333,7 @@ Be concise, warm, and professional.`
     <!-- Speaking indicator -->
     <div class="lw-speak-bar" id="lwSpeakBar">
       <div class="lw-speak-waves"><span></span><span></span><span></span><span></span><span></span></div>
-      <span class="lw-speak-text">LEON AI IS SPEAKING...</span>
+      <span class="lw-speak-text">LEON A I IS SPEAKING...</span>
       <button class="lw-speak-stop" id="lwSpeakStop">⏹ Stop</button>
     </div>
 
