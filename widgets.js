@@ -52,7 +52,7 @@ Be concise, warm, and professional.`
     if (/^(hi|hello|hey|good morning|good afternoon|good evening|habari|sasa|niaje|howdy)/.test(t))
       return "Hello! 👋 Welcome to LEON Graphics Design & Branding. I'm here to help with questions about our services, pricing, or how to get started. What can I do for you today?";
     if (/what.*service|what.*offer|what.*do you do|services available/.test(t))
-      return "We offer 4 core services: Graphic Design from KES 1,200_, Web Design and Development from KES 20,000+, Brand Strategy from KES 15,000+, and Print and Packaging from KES 800+. Which one interests you?";
+      return "We offer 4 core services: Graphic Design from KES 1,200+, Web Design and Development from KES 20,000+, Brand Strategy from KES 15,000+, and Print and Packaging from KES 800+. Which one interests you?";
     if (/price|cost|how much|pricing|rate|charge|fee|budget|ksh|kes|afford/.test(t))
       return "Here is our pricing guide: Graphic Design from KES 1,200+, Web Design from KES 20,000+, Brand Strategy from KES 15,000+, and Print and Packaging from KES 800+. For a custom quote contact us on WhatsApp at +254 719 628 766.";
     if (/logo/.test(t))
