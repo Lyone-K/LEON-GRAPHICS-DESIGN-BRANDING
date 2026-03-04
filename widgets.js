@@ -20,6 +20,7 @@
         { label: '💻 Web Design/Dev',     text: "Hi! I need a website designed or developed." },
         { label: '🚀 Branding',       text: "Hi! I'd like help with branding and identity." },
         { label: '💰 Get a Quote',    text: "Hi! I'd like to get a quote for a project." },
+        { label: '⏰ Open Hours',    text: "Hi! I'd like to know what time are your working hours." },
       ]
     },
     ai: {
