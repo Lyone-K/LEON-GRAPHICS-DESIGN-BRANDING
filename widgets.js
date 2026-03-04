@@ -25,7 +25,7 @@
     ai: {
       name: 'LEON AI',
       subtitle: 'Design Assistant · Always Online',
-      greeting: "Hello! 👋 I'm LEON's AI assistant.\n\nYou can type your question or tap the 🎤 mic button to speak — I'll reply by voice too!\n\nHow can I help you today?",
+      greeting: "Hello! 👋 I'm LEON's A I assistant.\n\nYou can type your question or tap the 🎤 mic button to speak — I'll reply by voice too!\n\nHow can I help you today?",
       systemPrompt: `You are LEON AI, the official assistant for LEON Graphics Design & Branding — a premium creative studio in Nairobi, Kenya.
 SERVICES & PRICING:
 - Graphic Design (logos, brand identity, illustrations, social media) — from KES 1,200+
@@ -54,7 +54,7 @@ Be concise, warm, and professional.`
     if (/what.*service|what.*offer|what.*do you do|services available/.test(t))
       return "We offer 4 core services: Graphic Design from KES 1,200_, Web Design and Development from KES 20,000+, Brand Strategy from KES 15,000+, and Print and Packaging from KES 800+. Which one interests you?";
     if (/price|cost|how much|pricing|rate|charge|fee|budget|ksh|kes|afford/.test(t))
-      return "Here is our pricing guide: Graphic Design from KES 1,200, Web Design from KES 20,000+, Brand Strategy from KES 15,000+, and Print and Packaging from KES 800+. For a custom quote contact us on WhatsApp at +254 719 628 766.";
+      return "Here is our pricing guide: Graphic Design from KES 1,200+, Web Design from KES 20,000+, Brand Strategy from KES 15,000+, and Print and Packaging from KES 800+. For a custom quote contact us on WhatsApp at +254 719 628 766.";
     if (/logo/.test(t))
       return "We design professional logos that truly capture your brand! We offer multiple unique concepts, unlimited revisions, and final files in all formats. Delivered in 3 to 7 days, starting from KES 1,200+. Ready to start? Contact us on +254 719 628 766.";
     if (/web|website|site|online|develop|e-commerce|ecommerce/.test(t))
@@ -333,7 +333,7 @@ Be concise, warm, and professional.`
     <!-- Speaking indicator -->
     <div class="lw-speak-bar" id="lwSpeakBar">
       <div class="lw-speak-waves"><span></span><span></span><span></span><span></span><span></span></div>
-      <span class="lw-speak-text">LEON A I IS SPEAKING...</span>
+      <span class="lw-speak-text">LEON AI IS SPEAKING...</span>
       <button class="lw-speak-stop" id="lwSpeakStop">⏹ Stop</button>
     </div>
 
