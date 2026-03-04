@@ -64,7 +64,7 @@ Be concise, warm, and professional.`
     if (/print|card|brochure|flyer|banner|packaging|poster|sticker/.test(t))
       return "We create amazing print materials — business cards, brochures, banners, posters, and product packaging. Starting from KES 800+. Contact us on +254 719 628 766 for a custom quote.";
     if (/how long|timeline|time|days|weeks|fast|quick|urgent|rush/.test(t))
-      return "Our typical turnaround times are: Logo design 3 to 7 days, Website 2 to 7 weeks, Full branding 3 to 6 weeks, and Print materials 2 to 5 days. Need something urgent? We offer rush delivery — call us on +254 719 628 766.";
+      return "Our typical turnaround times are: Graphics design 3 to 7 days, Website 2 to 7 weeks, Full branding 3 to 6 weeks, and Print materials 2 to 5 days. Need something urgent? We offer rush delivery — call us on +254 719 628 766.";
     if (/how.*work|process|how.*start|steps|procedure/.test(t))
       return "Here is how we work together: First, Discovery — we learn about your brand and goals. Second, Strategy — we build a creative direction. Third, Design — we craft your visuals. Fourth, Delivery — final files ready to use. Ready to begin? Call us on +254 719 628 766.";
     if (/contact|reach|phone|email|whatsapp|location|address|where|nairobi|find you/.test(t))
@@ -347,7 +347,7 @@ Be concise, warm, and professional.`
       </button>
     </div>
     <div class="lw-no-voice" id="lwNoVoice">🎤 Voice not supported in this browser</div>
-    <div class="lw-powered">Powered by <span>LEON AI ✦ Voice Enabled</span></div>
+    <div class="lw-powered">Powered by <span>✦LEON AI ✦</span></div>
   `;
   document.body.appendChild(aiEl);
 
