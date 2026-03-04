@@ -77,6 +77,8 @@ Be concise, warm, and professional.`
       return "We want you to absolutely love your design! All packages include revision rounds and we refine until you are 100 percent satisfied. Contact us on +254 719 628 766 for specific revision terms.";
     if (/social media|instagram|facebook|twitter|tiktok|content/.test(t))
       return "Yes, we create stunning social media graphics! Post designs, story covers, profile branding, content calendars, and ad creatives. Starting from KES 1,200+. Contact us on +254 719 628 766.";
+    if (/when are you open|what is your working hours|what days of the week are you open|are you available at any time| what if I contact you at/.test(t))
+      return "Thank you for considering LEON Graphics Design and Branding! We are available from Monday to Friday, 9AM to 5:30 PM. Or tap the WhatsApp button to chat instantly!";
     if (/thank|thanks|asante|appreciate|helpful/.test(t))
       return "You are very welcome! It is our pleasure to help. If you are ready to start a project or have more questions, call us on +254 719 628 766 or email leonkuyia at gmail dot com. We look forward to working with you!";
     if (/who are you|what are you|are you.*bot|are you.*ai|are you human/.test(t))
