@@ -9,7 +9,7 @@
 
   const CONFIG = {
     whatsapp: {
-      phone: '254719628766',
+      phone: '+254719628766',
       agentName: 'Leon Nkuyia',
       agentAvatar: 'LK',
       onlineHours: { start: 0, end: 24 },
