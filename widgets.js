@@ -436,7 +436,7 @@ Be concise, warm, and professional.`
     // Stop any current speech
     synth.cancel();
     // Clean text for speech (remove emojis and special chars)
-    const clean = text.replace(/[\u{1F600}-\u{1F9FF}]/gu,'').replace(/[✅🎨💻🚀🖨️⏱️📱📧📍⏰🏆💳🏦]/g,'').replace(/\*\*/g,'')  .replace(/\+254\s?(\d{3})\s?(\d{3})\s?(\d{3})/g, 'plus two five four seven one nine six two eight seven six six $1 $2 $3').trim();
+    const clean = text.replace(/[\u{1F600}-\u{1F9FF}]/gu,'').replace(/[✅🎨💻🚀🖨️⏱️📱📧📍⏰🏆💳🏦]/g,'').replace(/\*\*/g,'')  .replace(/\+254\s?(\d{3})\s?(\d{3})\s?(\d{3})/g, 'plus two five four seven one nine six two eight seven six six').trim();
     currentUtterance = new SpeechSynthesisUtterance(clean);
     currentUtterance.lang = 'en-KE';
     currentUtterance.rate = 0.95;
